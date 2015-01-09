@@ -57,16 +57,19 @@ void *get_smart_ptr_meta(void *ptr) {
     size_t *metasize = (size_t *) ptr - 1;
     if (*metasize == 0)
         return NULL;
+    assert(get_meta(ptr)->ptr == ptr);
     return (char *) metasize - *metasize;
 }
 
 void *sref(void *ptr) {
     s_meta *meta = get_meta(ptr);
+    assert(meta->ptr == ptr);
     assert(meta->kind == SHARED);
     meta->ref_count++;
     return ptr;
 }
 
+__attribute__((malloc))
 static void *alloc_entry(size_t size, size_t metasize) {
     return smalloc_allocator.alloc(sizeof (s_meta) + size + metasize + sizeof (void *));
 }
@@ -80,11 +83,16 @@ static void dealloc_entry(s_meta *meta, void *ptr) {
 
 __attribute__((malloc))
 static void *smalloc_impl(size_t size, int kind, f_destructor dtor, void *meta, size_t metasize) {
+    if (!size)
+        return NULL;
+
     // align the sizes to the size of a word
     metasize = align(metasize);
     size = align(size);
 
     s_meta *ptr = alloc_entry(size, metasize);
+    if (ptr == NULL)
+        return NULL;
 
     char *shifted = (char *) (ptr + 1);
     if (metasize && meta)
@@ -107,9 +115,10 @@ __attribute__((malloc))
 void *smalloc(size_t size, int kind, int count, ...) {
     va_list args;
 
+    int params = 0;
     if (count == 2) {
-        errno = EINVAL;
-        return NULL;
+        ++count;
+        ++params;
     }
     if (count > 3)
         count = 3;
@@ -121,7 +130,6 @@ void *smalloc(size_t size, int kind, int count, ...) {
         void *meta_ptr;
         size_t meta_size;
     } values = { NULL, NULL, 0 };
-    int params = 0;
 
     while (params < count) {
         switch (params++) {

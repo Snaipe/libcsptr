@@ -57,6 +57,7 @@ to the C programming language.
 * Simple unique\_ptr with destructor:
     ```c
     #include <unistd.h>
+    #include <fcntl.h>
     #include <csptr/smart_ptr.h>
 
     struct log_file {
@@ -72,7 +73,7 @@ to the C programming language.
     int main(void) {
         smart struct log_file *log = unique_ptr(sizeof (struct log_file), cleanup_log_file);
         *log = (struct log_file) {
-            .fd = open("/dev/null", "a")
+            .fd = open("/dev/null", O_WRONLY | O_APPEND)
         };
 
         write(log->fd, "Hello", 5);
@@ -144,7 +145,7 @@ to the C programming language.
         if (!log) // failure to allocate
             return NULL; // nothing happens, destructor is not called
 
-        log->fd = open(path, "a");
+        log->fd = open(path, O_WRONLY | O_APPEND | O_CREAT, 0644);
         if (log->fd == -1) // failure to open
             return NULL; // log gets destroyed, file descriptor is not closed since fd == -1.
 
@@ -155,6 +156,38 @@ to the C programming language.
         smart struct log_file *log = open_log("/dev/null");
         // ...
         return 0; // file descriptor is closed, log is freed
+    }
+    ```
+* Destructor macro helper:
+    ```c
+    #include <csptr/smart_ptr.h>
+
+    typedef struct {
+        // ...
+    } A;
+
+    typedef struct {
+        // ...
+    } B;
+
+    typedef struct {
+        A *a;
+        int some_int;
+        B *b;
+    } C;
+
+    DESTRUCTOR(destroy_c, static, a, b) {
+        printf("some_int = %d at destruction.\n", ptr->some_int); // why not ?
+    }
+
+    int main(void) {
+        smart C *c = unique_ptr(sizeof (C), destroy_c);
+        *c = (C) {
+            .a = unique_ptr(sizeof (A)),
+            .b = unique_ptr(sizeof (B)),
+            .some_int = 42
+        };
+        return 0; // c->a, c->b, and c are freed
     }
     ```
 

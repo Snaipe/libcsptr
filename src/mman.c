@@ -78,6 +78,7 @@ static void dealloc_entry(s_meta *meta, void *ptr) {
     smalloc_allocator.dealloc(meta);
 }
 
+__attribute__((malloc))
 static void *smalloc_impl(size_t size, int kind, f_destructor dtor, void *meta, size_t metasize) {
     // align the sizes to the size of a word
     metasize = align(metasize);
@@ -102,6 +103,7 @@ static void *smalloc_impl(size_t size, int kind, f_destructor dtor, void *meta, 
     return ptr->ptr;
 }
 
+__attribute__((malloc))
 void *smalloc(size_t size, int kind, int count, ...) {
     va_list args;
 
@@ -140,7 +142,7 @@ void sfree(void *ptr) {
     s_meta *meta = get_meta(ptr);
     assert(meta->ptr == ptr);
 
-    if (meta->kind == UNIQUE || --meta->ref_count)
+    if (meta->kind == SHARED && --meta->ref_count)
         return;
 
     dealloc_entry(meta, ptr);

@@ -160,11 +160,11 @@ to the C programming language.
 
 ## FAQ
 
-**Q. Why didn't you use C++ you moron ?**
+**Q. Why didn't you use C++ you moron ?**  
 A. Because when I first started this, I was working on a C project.
    Also, because it's fun.
 
-**Q. Can I use this on a serious project ?**
+**Q. Can I use this on a serious project ?**  
 A. Altough I used these on three projects already, I would not.
    It's *probably* fine, but this is still a toy project, and has yet to
    mature -- beware of bugs !

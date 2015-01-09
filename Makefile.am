@@ -18,3 +18,5 @@ subdirinclude_HEADERS = \
 
 libcsptr_la_SOURCES = \
 	src/mman.c
+
+man3_MANS = doc/csptr.3

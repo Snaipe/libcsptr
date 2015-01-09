@@ -9,7 +9,7 @@
 !LICENSE
 !HEADER
 !README.md
-!doc/
+!doc/*
 
 !Makefile.am
 !configure.ac

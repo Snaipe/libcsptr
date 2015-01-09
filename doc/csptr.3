@@ -1,0 +1,85 @@
+.TH CSPTR 3  2015-01-09 "" ""
+.SH NAME
+csptr \- smart pointers for the C programming language
+.SH SYNOPSIS
+.nf
+.B #include <csptr/smart_ptr.h>
+.sp
+.BI "void *unique_ptr(size_t " "size" ", ... );"
+.BI "void *shared_ptr(size_t " "size" ", ... );"
+.sp
+.B #include <csptr/smart_ptr.h>
+.B #include <csptr/mman.h>
+.BI "void *smalloc(size_t " "size" ", int " "kind");
+.BI "void *smalloc(size_t " "size" ", int " "kind" ", void (" "*dtor" ")(void *, void *));"
+.BI "void *smalloc(size_t " "size" ", int " "kind" ", void " "*meta" ", size_t " "metasize" );
+.BI "void *smalloc(size_t " "size" ", int " "kind" ", void (" "*dtor" ")(void *, void *), void " "*meta" ", size_t " "metasize" );
+.BI "void sfree(void " "*ptr" );
+.BI "void *sref(void " "*ptr" );
+.fi
+.SH DESCRIPTION
+.PP
+The
+.BR smalloc ()
+function calls an allocator
+.BR "" ( malloc (3)
+by default), such that the returned pointer is a smart pointer.
+.IR "The memory is not initialized" .
+If
+.I size
+is 0, then
+.BR smalloc ()
+returns NULL.
+.PP
+The
+.BR sfree ()
+function calls the deallocator associated to the
+.BR smalloc ()
+allocator
+.BR "" ( free (3)
+by default) on
+.I ptr
+if the smart pointer is either unique or shared with a reference
+count of 0. If the smart pointer is shared, it shall decrement the reference
+counter by 1 before checking if the deallocator needs to be called.
+.PP
+The
+.BR sref ()
+function creates a new reference to
+.IR "ptr" ,
+incrementing the internal reference counter of the smart shared pointer by 1.
+It shall only be called on a shared pointer.
+.PP
+The
+.BR unique_ptr ()
+and
+.BR shared_ptr ()
+macros expand to a call to the
+.BR smalloc ()
+function with either UNIQUE or SHARED for the
+.I kind
+parameter.
+.SH RETURN VALUE
+The
+.BR smalloc ()
+function return a pointer to the newly allocated memory.
+On error, it return NULL.
+NULL may also be returned by a successful call to
+.BR smalloc ()
+with a
+.I size
+of zero.
+.PP
+The
+.BR sfree ()
+function returns no value.
+.PP
+The
+.BR sref ()
+function returns
+.IR "ptr" .
+
+.SH SEE ALSO
+.ad l
+.nh
+.BR malloc (3)

@@ -1,0 +1,16 @@
+*
+!*/
+
+!.gitignore
+
+!*.c
+!*.h
+
+!LICENSE
+!HEADER
+
+!Makefile.am
+!configure.ac
+!autogen.sh
+
+src/config.h

@@ -8,6 +8,8 @@
 
 !LICENSE
 !HEADER
+!README.md
+!doc/
 
 !Makefile.am
 !configure.ac

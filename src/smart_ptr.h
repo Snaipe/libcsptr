@@ -36,8 +36,8 @@ inline void sfree_stack(void *ptr) {
 }
 
 # define smart __attribute__ ((cleanup(sfree_stack)))
-# define shared_ptr(Size, Args...) smalloc(Size, SHARED, Args)
-# define unique_ptr(Size, Args...) smalloc(Size, UNIQUE, Args)
+# define shared_ptr(Size, Args...) smalloc(Size, SHARED, ## Args)
+# define unique_ptr(Size, Args...) smalloc(Size, UNIQUE, ## Args)
 
 # define DESTRUCTOR(Name, Attr, Type, Args...)                      \
     static void Name##_impl(__attribute__((unused)) Type *ptr,      \

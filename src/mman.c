@@ -51,7 +51,7 @@ static s_meta *get_meta(void *ptr) {
     return (s_meta *) ((char *) size - *size - sizeof (s_meta));
 }
 
-void *get_user_meta(void *ptr) {
+void *get_smart_ptr_meta(void *ptr) {
     assert((size_t) ptr == align((size_t) ptr));
 
     size_t *metasize = (size_t *) ptr - 1;
@@ -73,7 +73,7 @@ static void *alloc_entry(size_t size, size_t metasize) {
 
 static void dealloc_entry(s_meta *meta, void *ptr) {
     if (meta->dtor)
-        meta->dtor(ptr, get_user_meta(ptr));
+        meta->dtor(ptr, get_smart_ptr_meta(ptr));
 
     smalloc_allocator.dealloc(meta);
 }

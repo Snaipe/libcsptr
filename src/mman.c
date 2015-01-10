@@ -87,10 +87,10 @@ static void *smalloc_impl(size_t size, int kind, f_destructor dtor, void *meta, 
         return NULL;
 
     // align the sizes to the size of a word
-    metasize = align(metasize);
+    size_t aligned_metasize = align(metasize);
     size = align(size);
 
-    s_meta *ptr = alloc_entry(size, metasize);
+    s_meta *ptr = alloc_entry(size, aligned_metasize);
     if (ptr == NULL)
         return NULL;
 
@@ -98,8 +98,8 @@ static void *smalloc_impl(size_t size, int kind, f_destructor dtor, void *meta, 
     if (metasize && meta)
         memcpy(shifted, meta, metasize);
 
-    size_t *sz = (size_t *) (shifted + metasize);
-    *sz = metasize;
+    size_t *sz = (size_t *) (shifted + aligned_metasize);
+    *sz = aligned_metasize;
 
     *ptr = (s_meta) {
         .kind = kind,

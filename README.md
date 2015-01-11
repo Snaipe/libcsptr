@@ -12,9 +12,18 @@ to the C programming language.
 
 ## Installing
 
+### Prerequisites
+
+* To compile the library, GCC 4.9+ is needed.
+* To compile any project with the library, Clang or GCC are needed.
+
+### Installation
+
 1. Clone this repository
 2. run `./autogen.sh && ./configure --prefix=$HOME/ && make && make install`
-   from the project root.
+   from the project root for a local install, or run
+   `./autogen.sh && ./configure && make && sudo make install` for a global
+   install.
 
 ## Examples
 

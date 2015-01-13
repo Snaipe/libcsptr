@@ -5,7 +5,7 @@ lib_LTLIBRARIES = libcsptr.la
 WARNINGS = -Wall -Wextra \
 	-Wno-unused-result -Wno-missing-field-initializers
 
-libcsptr_la_CFLAGS = $(WARNINGS) -std=gnu11
+libcsptr_la_CFLAGS = $(WARNINGS) -std=gnu11 -fplan9-extensions
 
 EXTRA_DIST = LICENSE
 

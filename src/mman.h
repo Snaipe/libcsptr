@@ -31,7 +31,9 @@
 
 enum pointer_kind {
     UNIQUE,
-    SHARED
+    SHARED,
+
+    ARRAY = 1 << 8
 };
 
 typedef void (*f_destructor)(void *, void *);
@@ -46,9 +48,9 @@ extern s_allocator smalloc_allocator;
 void *get_smart_ptr_meta(void *ptr);
 void *sref(void *ptr);
 __attribute__((malloc))
-void *smalloc(size_t size, int kind, int argcount, ...);
+void *smalloc(size_t size, size_t nmemb, int kind, int count, ...);
 void sfree(void *ptr);
 
-# define smalloc(Size, Kind, Args...) smalloc(Size, Kind, ARG_LENGTH(Args), ## Args)
+# define smalloc(Size, Nmemb, Kind, Args...) smalloc(Size, Nmemb, Kind, ARG_LENGTH(Args), ## Args)
 
 #endif /* !CSPTR_MMAN_H_ */

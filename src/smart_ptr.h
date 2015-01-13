@@ -36,8 +36,17 @@ inline void sfree_stack(void *ptr) {
 }
 
 # define smart __attribute__ ((cleanup(sfree_stack)))
-# define shared_ptr(Type, Args...) smalloc(sizeof (Type), SHARED, ## Args)
-# define unique_ptr(Type, Args...) smalloc(sizeof (Type), UNIQUE, ## Args)
+# define smart_ptr(Type, Kind, Args...)                                 \
+    ({                                                                  \
+        const typeof(Type) dummy;                                       \
+        const size_t nmemb = sizeof (dummy) / sizeof (dummy[0]);        \
+        __builtin_choose_expr(sizeof (dummy[0]) == sizeof (dummy),      \
+            smalloc(sizeof (Type), 0, Kind , ## Args),                  \
+            smalloc(sizeof (dummy[0]), nmemb, Kind , ## Args));         \
+    })
+
+# define shared_ptr(Type, Args...) smart_ptr(Type, SHARED , ## Args)
+# define unique_ptr(Type, Args...) smart_ptr(Type, UNIQUE , ## Args)
 
 # define DESTRUCTOR(Name, Attr, Type, Args...)                      \
     static void Name##_impl(__attribute__((unused)) Type *ptr,      \

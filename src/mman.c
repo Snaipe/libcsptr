@@ -42,6 +42,11 @@ typedef struct {
     f_destructor dtor;
 } s_meta;
 
+typedef struct {
+    size_t nmemb;
+    size_t size;
+} s_meta_array;
+
 INLINE size_t align(size_t s) {
     return (s + (sizeof (void *) - 1)) & ~(sizeof (void *) - 1);
 }
@@ -69,19 +74,26 @@ void *sref(void *ptr) {
     return ptr;
 }
 
-__attribute__((malloc))
+__attribute__ ((malloc))
 static void *alloc_entry(size_t size, size_t metasize) {
     return smalloc_allocator.alloc(sizeof (s_meta) + size + metasize + sizeof (void *));
 }
 
 static void dealloc_entry(s_meta *meta, void *ptr) {
-    if (meta->dtor)
-        meta->dtor(ptr, get_smart_ptr_meta(ptr));
+    if (meta->dtor) {
+        void *user_meta = get_smart_ptr_meta(ptr);
+        if (meta->kind & ARRAY) {
+            s_meta_array *arr_meta = (void *) (meta + 1);
+            for (size_t i = 0; i < arr_meta->nmemb; ++i)
+                meta->dtor(ptr + arr_meta->size * i, user_meta);
+        } else
+            meta->dtor(ptr, user_meta);
+    }
 
     smalloc_allocator.dealloc(meta);
 }
 
-__attribute__((malloc))
+__attribute__ ((malloc))
 static void *smalloc_impl(size_t size, int kind, f_destructor dtor, void *meta, size_t metasize) {
     if (!size)
         return NULL;
@@ -111,8 +123,20 @@ static void *smalloc_impl(size_t size, int kind, f_destructor dtor, void *meta, 
     return ptr->ptr;
 }
 
-__attribute__((malloc))
-void *smalloc(size_t size, int kind, int count, ...) {
+__attribute__ ((malloc))
+void *smalloc_array(size_t size, size_t nmemb, int kind, f_destructor dtor, void *meta, size_t metasize) {
+    char new_meta[align(metasize + sizeof(s_meta_array))];
+    s_meta_array *arr_meta = (void *) new_meta;
+    *arr_meta = (s_meta_array) {
+        .size = size,
+        .nmemb = nmemb
+    };
+    memcpy(arr_meta + 1, meta, metasize);
+    return smalloc_impl(nmemb * size, kind | ARRAY, dtor, &new_meta, sizeof (new_meta));
+}
+
+__attribute__ ((malloc))
+void *smalloc(size_t size, size_t nmemb, int kind, int count, ...) {
     va_list args;
 
     int params = 0;
@@ -140,7 +164,10 @@ void *smalloc(size_t size, int kind, int count, ...) {
     }
 
     va_end(args);
-    return smalloc_impl(size, kind, values.dtor, values.meta_ptr, values.meta_size);
+    if (nmemb == 0)
+        return smalloc_impl(size, kind, values.dtor, values.meta_ptr, values.meta_size);
+    else
+        return smalloc_array(size, nmemb, kind, values.dtor, values.meta_ptr, values.meta_size);
 }
 
 void sfree(void *ptr) {

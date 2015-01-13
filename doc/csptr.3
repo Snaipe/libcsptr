@@ -5,8 +5,8 @@ csptr \- smart pointers for the C programming language
 .nf
 .B #include <csptr/smart_ptr.h>
 .sp
-.BI "void *unique_ptr(size_t " "size" ", ... );"
-.BI "void *shared_ptr(size_t " "size" ", ... );"
+.BI "void *unique_ptr(" Type ", ... );"
+.BI "void *shared_ptr(" "Type" ", ... );"
 .sp
 .B #include <csptr/smart_ptr.h>
 .B #include <csptr/mman.h>
@@ -56,9 +56,13 @@ and
 .BR shared_ptr ()
 macros expand to a call to the
 .BR smalloc ()
-function with either UNIQUE or SHARED for the
+function with a
+.I size
+of sizeof
+.IR "" ( Type )
+and either UNIQUE or SHARED for the
 .I kind
-parameter.
+parameter. Additional parameters are passed as-is to the function.
 .SH RETURN VALUE
 The
 .BR smalloc ()

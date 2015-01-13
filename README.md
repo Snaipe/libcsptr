@@ -34,7 +34,7 @@ to the C programming language.
     #include <csptr/smart_ptr.h>
 
     int main(void) {
-        smart int *some_int = unique_ptr(sizeof (int));
+        smart int *some_int = unique_ptr(int);
         *some_int = 1;
 
         printf("%p = %d\n", some_int, *some_int);
@@ -80,7 +80,7 @@ to the C programming language.
     }
 
     int main(void) {
-        smart struct log_file *log = unique_ptr(sizeof (struct log_file), cleanup_log_file);
+        smart struct log_file *log = unique_ptr(struct log_file, cleanup_log_file);
         *log = (struct log_file) {
             .fd = open("/dev/null", O_WRONLY | O_APPEND)
         };
@@ -96,7 +96,7 @@ to the C programming language.
     #include <csptr/smart_ptr.h>
 
     void *new_array(size_t size, size_t len) {
-        return unique_ptr(size * len, NULL, &len, sizeof (len));
+        return smalloc(size * len, UNIQUE, NULL, &len, sizeof (len));
     }
 
     size_t length(void *arr) {
@@ -150,7 +150,7 @@ to the C programming language.
     }
 
     struct log_file *open_log(const char *path) {
-        smart struct log_file *log = shared_ptr(sizeof (struct log_file), close_log);
+        smart struct log_file *log = shared_ptr(struct log_file, close_log);
         if (!log) // failure to allocate
             return NULL; // nothing happens, destructor is not called
 
@@ -190,10 +190,10 @@ to the C programming language.
     }
 
     int main(void) {
-        smart C *c = unique_ptr(sizeof (C), destroy_c);
+        smart C *c = unique_ptr(C, destroy_c);
         *c = (C) {
-            .a = unique_ptr(sizeof (A)),
-            .b = unique_ptr(sizeof (B)),
+            .a = unique_ptr(A),
+            .b = unique_ptr(B),
             .some_int = 42
         };
         return 0; // c->a, c->b, and c are freed

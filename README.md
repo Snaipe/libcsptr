@@ -91,26 +91,31 @@ to the C programming language.
         return 0;
     }
     ```
-* Simple metadata usage to implement length-aware arrays:
+* Allocating a smart array and printing its contents before destruction:
     ```c
+    #include <stdio.h>
     #include <csptr/smart_ptr.h>
+    #include <csptr/array.h>
 
-    void *new_array(size_t size, size_t len) {
-        return smalloc(size * len, UNIQUE, NULL, &len, sizeof (len));
+    void print_int(void *ptr, void *meta) {
+        // ptr points to the current element
+        // meta points to the array metadata (global to the array), if any.
+        printf("%d\n", *(int*) ptr);
     }
 
-    size_t length(void *arr) {
-        size_t *size = get_smart_ptr_meta(arr);
-        return size ? *size : 0; // size may be NULL if arr is invalid
-    }
+    int main(int argc, const char *argv[])
+    {
+        // Destructors for array types are run on every element of the
+        // array before destruction.
+        smart int *ints = unique_ptr(int[10], print_int);
 
-    int main(void) {
-        smart int *arr = new_array(sizeof (int), 4);
-        for (size_t i = 0; i < length(arr); ++i)
-            arr[i] = i;
+        // Smart arrays are length-aware
+        for (size_t i = 0; i < array_length(ints); ++i) {
+            ints[i] = i;
+        }
 
-        // ...
-        // arr is destroyed
+        // Not initializing the array before getting out of scope
+        // is undefined behavior: beware !
         return 0;
     }
     ```

@@ -4,7 +4,7 @@ C Smart Pointers
 ## What this is
 
 This project is a tentative attempt to bring smart pointer constructs
-to the C programming language.
+to the (GNU) C programming language.
 
 * `unique_ptr`, `shared_ptr` macros, and `smart` type attribute
 * Destructor support for cleanup

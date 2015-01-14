@@ -25,7 +25,15 @@
 #ifndef CSPTR_CPP_VARARG_H_
 # define CSPTR_CPP_VARARG_H_
 
-# define ARG_LENGTH(...) ARG_LENGTH_(,##__VA_ARGS__,                           \
+#if __STRICT_ANSI__
+# define ARG_LENGTH(...) __builtin_choose_expr(sizeof (#__VA_ARGS__) == 1,  \
+        0,                                                                  \
+        ARG_LENGTH__(__VA_ARGS__))
+#else /* !__STRICT_ANSI__ */
+# define ARG_LENGTH(...) ARG_LENGTH__(__VA_ARGS__)
+#endif /* !__STRICT_ANSI__ */
+
+# define ARG_LENGTH__(...) ARG_LENGTH_(,##__VA_ARGS__,                         \
     63, 62, 61, 60, 59, 58, 57, 56, 55, 54, 53, 52, 51, 50, 49, 48, 47, 46, 45,\
     44, 43, 42, 41, 40, 39, 38, 37, 36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26,\
     25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6,\

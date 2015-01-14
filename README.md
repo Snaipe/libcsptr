@@ -212,7 +212,7 @@ A. Because when I first started this, I was working on a C project.
    Also, because it's fun.
 
 **Q. Can I use this on a serious project ?**  
-A. Altough I used these on three projects already, I would not.
+A. Although I used these on three projects already, I would not.
    It's *probably* fine, but this is still a toy project, and has yet to
    mature -- beware of bugs !
 

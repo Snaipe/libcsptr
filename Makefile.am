@@ -5,7 +5,12 @@ lib_LTLIBRARIES = libcsptr.la
 WARNINGS = -Wall -Wextra \
 	-Wno-unused-result -Wno-missing-field-initializers
 
-libcsptr_la_CFLAGS = $(WARNINGS) -std=gnu11 -fplan9-extensions
+libcsptr_la_CFLAGS = \
+	$(WARNINGS) \
+	-std=gnu11 \
+	-fplan9-extensions
+
+libcsptr_la_LDFLAGS = $(FLAG_WRAP_MALLOC)
 
 EXTRA_DIST = LICENSE README.md
 
@@ -18,6 +23,7 @@ subdirinclude_HEADERS = \
 	src/smart_ptr.h
 
 libcsptr_la_SOURCES = \
-	src/mman.c
+	src/mman.c \
+	src/wrap_malloc.c
 
 man3_MANS = doc/csptr.3

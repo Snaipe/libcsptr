@@ -1,0 +1,36 @@
+2015-01-14  Franklin "Snaipe" Mathieu  <franklinmathieu@gmail.com>
+
+    * configure.ac: Added --with-malloc-wrapper and --with-fixed-allocator
+    flags for ./configure.
+
+    * src/mman.c: Added a fixed allocator support -- if the user does not
+    want to override at runtime the allocators used by smalloc/sfree and just
+    want to use malloc and free, they may enable this option using the
+    --with-fixed-allocator configuration flag.
+
+    * src/wrap_malloc.{c,h}, src/mman.c: Added malloc/free wrappers.
+    Pointers produced by malloc can be used with the `smart` attribute,
+    and smart pointers may be passed to free. This option is deactivated
+    by default, and can be enabled using the --with-malloc-wrapper
+    configuration flag.
+
+2015-01-14  Franklin "Snaipe" Mathieu  <franklinmathieu@gmail.com>
+
+    * src/smart_ptr.h: unique_ptr and shared_ptr now take a type parameter
+    instead of a size.
+
+    * src/smart_ptr.h: Added support for static array types in the unique_ptr
+    and shared_ptr macros.
+
+    * src/mman.{c,h}: Added smart array allocation through smalloc. smalloc
+    has been changed to take a mandatory `nmemb` parameter, that may be 0
+    if the allocated type is a scalar, and an array for any other value.
+
+2015-01-13  Franklin "Snaipe" Mathieu  <franklinmathieu@gmail.com>
+
+    * src/smart_ptr.h: Added unique_ptr and shared_ptr macros, added
+    `smart` variable attribute.
+
+    * src/mman.{c,h}: Added smalloc, sfree, sref, and get_smart_user_meta.
+    Alternative allocators may be specified by setting the contents of
+    `smalloc_allocator`.

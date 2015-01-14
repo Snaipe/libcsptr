@@ -9,6 +9,7 @@
 !LICENSE
 !HEADER
 !README.md
+!ChangeLog
 !doc/*
 
 !Makefile.am

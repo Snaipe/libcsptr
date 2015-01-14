@@ -29,6 +29,7 @@
 #include <assert.h>
 
 #include "mman.h"
+#include "array.h"
 #undef smalloc
 
 #define INLINE __attribute__ ((always_inline)) inline
@@ -47,11 +48,6 @@ typedef struct {
     s_meta;
     _Atomic size_t ref_count;
 } s_meta_shared;
-
-typedef struct {
-    size_t nmemb;
-    size_t size;
-} s_meta_array;
 
 INLINE static size_t align(size_t s) {
     return (s + (sizeof (void *) - 1)) & ~(sizeof (void *) - 1);

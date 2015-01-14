@@ -14,6 +14,7 @@ subdirinclude_HEADERS = \
 	src/vararg.h \
 	src/apply.h \
 	src/mman.h \
+	src/array.h \
 	src/smart_ptr.h
 
 libcsptr_la_SOURCES = \

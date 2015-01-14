@@ -98,13 +98,13 @@ to the C programming language.
     #include <csptr/array.h>
 
     void print_int(void *ptr, void *meta) {
+        (void) meta;
         // ptr points to the current element
         // meta points to the array metadata (global to the array), if any.
         printf("%d\n", *(int*) ptr);
     }
 
-    int main(int argc, const char *argv[])
-    {
+    int main(void) {
         // Destructors for array types are run on every element of the
         // array before destruction.
         smart int *ints = unique_ptr(int[10], print_int);
@@ -216,5 +216,5 @@ A. Altough I used these on three projects already, I would not.
    It's *probably* fine, but this is still a toy project, and has yet to
    mature -- beware of bugs !
 
-**Q. How did you make this ?**
+**Q. How did you make this ?**  
 A. Here's a [link to my blog post](http://snaipe.me/c/c-smart-pointers/) on the matter.

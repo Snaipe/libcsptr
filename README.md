@@ -215,3 +215,6 @@ A. Because when I first started this, I was working on a C project.
 A. Altough I used these on three projects already, I would not.
    It's *probably* fine, but this is still a toy project, and has yet to
    mature -- beware of bugs !
+
+**Q. How did you make this ?**
+A. Here's a [link to my blog post](http://snaipe.me/c/c-smart-pointers/) on the matter.

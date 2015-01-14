@@ -53,11 +53,13 @@ INLINE static size_t align(size_t s) {
     return (s + (sizeof (void *) - 1)) & ~(sizeof (void *) - 1);
 }
 
+__attribute__ ((pure))
 INLINE static s_meta *get_meta(void *ptr) {
     size_t *size = (size_t *) ptr - 1;
     return (s_meta *) ((char *) size - *size - sizeof (s_meta));
 }
 
+__attribute__ ((pure))
 void *get_smart_ptr_meta(void *ptr) {
     assert((size_t) ptr == align((size_t) ptr));
 

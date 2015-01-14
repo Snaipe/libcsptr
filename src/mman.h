@@ -45,6 +45,7 @@ typedef struct {
 
 extern s_allocator smalloc_allocator;
 
+__attribute__ ((pure))
 void *get_smart_ptr_meta(void *ptr);
 void *sref(void *ptr);
 __attribute__((malloc))

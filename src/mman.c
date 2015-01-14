@@ -37,12 +37,16 @@ s_allocator smalloc_allocator = {malloc, free};
 
 typedef struct {
     enum pointer_kind kind;
-    _Atomic size_t ref_count;
     f_destructor dtor;
 #ifndef NDEBUG
     void *ptr;
 #endif /* !NDEBUG */
 } s_meta;
+
+typedef struct {
+    s_meta;
+    _Atomic size_t ref_count;
+} s_meta_shared;
 
 typedef struct {
     size_t nmemb;
@@ -72,16 +76,16 @@ void *sref(void *ptr) {
     s_meta *meta = get_meta(ptr);
     assert(meta->ptr == ptr);
     assert(meta->kind == SHARED);
-    meta->ref_count++;
+    ((s_meta_shared *) meta)->ref_count++;
     return ptr;
 }
 
 __attribute__ ((malloc))
-INLINE static void *alloc_entry(size_t size, size_t metasize) {
+INLINE static void *alloc_entry(size_t head, size_t size, size_t metasize) {
 #ifdef SMALLOC_FIXED_ALLOCATOR
-    return malloc(sizeof (s_meta) + size + metasize + sizeof (void *));
+    return malloc(head + size + metasize + sizeof (size_t));
 #else /* !SMALLOC_FIXED_ALLOCATOR */
-    return smalloc_allocator.alloc(sizeof (s_meta) + size + metasize + sizeof (void *));
+    return smalloc_allocator.alloc(head + size + metasize + sizeof (size_t));
 #endif /* !SMALLOC_FIXED_ALLOCATOR */
 }
 
@@ -112,25 +116,28 @@ static void *smalloc_impl(size_t size, int kind, f_destructor dtor, void *meta, 
     size_t aligned_metasize = align(metasize);
     size = align(size);
 
-    s_meta *ptr = alloc_entry(size, aligned_metasize);
+    size_t head_size = kind & SHARED ? sizeof (s_meta_shared) : sizeof (s_meta);
+    s_meta_shared *ptr = alloc_entry(head_size, size, aligned_metasize);
     if (ptr == NULL)
         return NULL;
 
-    char *shifted = (char *) (ptr + 1);
+    char *shifted = (char *) ptr + head_size;
     if (metasize && meta)
         memcpy(shifted, meta, metasize);
 
     size_t *sz = (size_t *) (shifted + aligned_metasize);
     *sz = aligned_metasize;
 
-    *ptr = (s_meta) {
+    *(s_meta*) ptr = (s_meta) {
         .kind = kind,
-        .ref_count = ATOMIC_VAR_INIT(1),
         .dtor = dtor,
 #ifndef NDEBUG
         .ptr = sz + 1
 #endif
     };
+
+    if (kind & SHARED)
+        ptr->ref_count = ATOMIC_VAR_INIT(1);
 
     return sz + 1;
 }
@@ -189,7 +196,7 @@ void sfree(void *ptr) {
     s_meta *meta = get_meta(ptr);
     assert(meta->ptr == ptr);
 
-    if (meta->kind == SHARED && --meta->ref_count)
+    if (meta->kind == SHARED && --((s_meta_shared *) meta)->ref_count)
         return;
 
     dealloc_entry(meta, ptr);

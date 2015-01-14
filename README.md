@@ -76,7 +76,7 @@ to the C programming language.
 
     void cleanup_log_file(void *ptr, void *meta) {
         (void) meta;
-        close(((struct log_file *) log)->fd);
+        close(((struct log_file *) ptr)->fd);
     }
 
     int main(void) {

@@ -36,13 +36,13 @@ inline void sfree_stack(void *ptr) {
 }
 
 # define smart __attribute__ ((cleanup(sfree_stack)))
-# define smart_ptr(Type, Kind, Args...)                                 \
-    ({                                                                  \
-        const typeof(Type) dummy;                                       \
-        const size_t nmemb = sizeof (dummy) / sizeof (dummy[0]);        \
-        __builtin_choose_expr(sizeof (dummy[0]) == sizeof (dummy),      \
-            smalloc(sizeof (Type), 0, Kind , ## Args),                  \
-            smalloc(sizeof (dummy[0]), nmemb, Kind , ## Args));         \
+# define smart_ptr(Type, Kind, Args...)                                     \
+    ({                                                                      \
+        const __typeof__(Type[1]) dummy;                                    \
+        __builtin_choose_expr(sizeof (dummy[0]) == sizeof (dummy),          \
+            smalloc(sizeof (Type), 0, Kind, ## Args),                       \
+            smalloc(sizeof (dummy[0]),                                      \
+                sizeof (dummy) / sizeof (dummy[0]), Kind, ## Args));        \
     })
 
 # define shared_ptr(Type, Args...) smart_ptr(Type, SHARED , ## Args)

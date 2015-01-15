@@ -17,3 +17,5 @@
 !autogen.sh
 
 src/config.h
+*~
+*.swp

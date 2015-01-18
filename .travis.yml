@@ -3,7 +3,8 @@ compiler:
   - gcc
 before_install:
   - sudo pip install cpp-coveralls
-  - sudo apt-get install -y check
+  - sudo apt-get -qq install -y check gcc-4.9
+  - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 90
 script:
   - autoreconf -i && ./configure --enable-gcov && make && make check
 after_success:

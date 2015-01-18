@@ -9,9 +9,10 @@ WARNINGS = -Wall -Wextra \
 libcsptr_la_CFLAGS = \
 	$(WARNINGS) \
 	-std=gnu11 \
-	-fplan9-extensions
+	-fplan9-extensions \
+	$(COVERAGE_CFLAGS)
 
-libcsptr_la_LDFLAGS = $(FLAG_WRAP_MALLOC)
+libcsptr_la_LDFLAGS = $(FLAG_WRAP_MALLOC) $(COVERAGE_LDFLAGS)
 
 EXTRA_DIST = LICENSE README.md
 

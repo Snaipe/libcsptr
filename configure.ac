@@ -35,6 +35,16 @@ AC_ARG_WITH([malloc-wrapper],
     ],
     [])
 
+AC_ARG_ENABLE([gcov],
+  [AS_HELP_STRING([--enable-gcov],
+    [Compile the project with converage enabled])],
+    [COVERAGE_CFLAGS="-O0 -fprofile-arcs -ftest-coverage"
+     COVERAGE_LDFLAGS="-lgcov"
+     AC_SUBST([COVERAGE_CFLAGS])
+     AC_SUBST([COVERAGE_LDFLAGS])
+    ],
+    [])
+
 AC_CONFIG_HEADERS([src/config.h])
 AC_CONFIG_FILES([Makefile check/Makefile])
 

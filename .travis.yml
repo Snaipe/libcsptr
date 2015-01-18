@@ -3,6 +3,7 @@ compiler:
   - gcc
 before_install:
   - sudo pip install cpp-coveralls
+  - sudo apt-get install -y check
 script:
   - autoreconf -i && ./configure --enable-gcov && make && make check
 after_success:

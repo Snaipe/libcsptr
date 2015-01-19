@@ -11,4 +11,6 @@ check_unit_LDADD = $(top_builddir)/libcsptr.la @CHECK_LIBS@
 check_unit_SOURCES = \
 	test/test.c \
 	test/scalar.c \
+	test/misc.c \
+	test/shared.c \
 	test/array.c

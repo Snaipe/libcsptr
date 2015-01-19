@@ -33,7 +33,7 @@
 
 #ifdef SMALLOC_WRAP_MALLOC
 void *(*real_malloc)(size_t) = NULL;
-void *(*real_realloc)(size_t) = NULL;
+void *(*real_realloc)(void *, size_t) = NULL;
 void (*real_free)(void *) = NULL;
 
 __attribute__ ((constructor))
@@ -67,6 +67,7 @@ __attribute__ ((malloc))
 void *calloc(size_t size, size_t nmemb) {
     void *ptr = smalloc(size, nmemb, UNIQUE, 0);
     memset(ptr, 0, size * nmemb);
+    return ptr;
 }
 
 void free(void *ptr) {
@@ -74,6 +75,6 @@ void free(void *ptr) {
 }
 
 void *realloc(void *ptr, size_t size) {
-    return real_realloc(ptr ? get_meta(ptr) : NULL, size);
+    return real_realloc(ptr != NULL ? get_meta(ptr) : NULL, size);
 }
 #endif /* !SMALLOC_WRAP_MALLOC */

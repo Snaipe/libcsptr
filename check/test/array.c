@@ -33,7 +33,7 @@ START_TEST (test_array_dtor_run) {
 } END_TEST
 
 START_TEST (test_array_meta) {
-    int *arr = unique_ptr(int[ARRAY_SIZE], &m, sizeof (m));
+    smart int *arr = unique_ptr(int[ARRAY_SIZE], &m, sizeof (m));
     assert_valid_array(arr, ARRAY_SIZE, sizeof (int));
     assert_valid_meta(arr, &m, array_user_meta(arr));
 } END_TEST

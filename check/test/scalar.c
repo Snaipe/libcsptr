@@ -38,6 +38,7 @@ TFun scalar_tests[] = {
     test_pointer_valid,
     test_meta,
     test_dtor_run,
-    test_dtor_run_with_meta
+    test_dtor_run_with_meta,
+    NULL
 };
 

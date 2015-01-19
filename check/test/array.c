@@ -55,4 +55,5 @@ TFun array_tests[] = {
     test_array_meta,
     test_array_dtor_run,
     test_array_dtor_run_with_meta,
+    NULL
 };

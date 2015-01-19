@@ -58,18 +58,22 @@ INLINE static size_t align(size_t s) {
 __attribute__ ((pure))
 INLINE static s_meta *get_meta(void *ptr) {
     size_t *size = (size_t *) ptr - 1;
-    return (s_meta *) ((char *) size - *size - sizeof (s_meta));
+    return (s_meta *) ((char *) size - *size);
 }
 
 __attribute__ ((pure))
 void *get_smart_ptr_meta(void *ptr) {
     assert((size_t) ptr == align((size_t) ptr));
 
+    s_meta *meta = get_meta(ptr);
+    assert(meta->ptr == ptr);
+
+    size_t head_size = meta->kind & SHARED ? sizeof (s_meta_shared) : sizeof (s_meta);
     size_t *metasize = (size_t *) ptr - 1;
-    if (*metasize == 0)
+    if (*metasize == head_size)
         return NULL;
-    assert(get_meta(ptr)->ptr == ptr);
-    return (char *) metasize - *metasize;
+
+    return (char *) meta + head_size;
 }
 
 void *sref(void *ptr) {
@@ -135,7 +139,7 @@ static void *smalloc_impl(size_t size, int kind, f_destructor dtor, void *meta, 
         memcpy(shifted, meta, metasize);
 
     size_t *sz = (size_t *) (shifted + aligned_metasize);
-    *sz = aligned_metasize;
+    *sz = head_size + aligned_metasize;
 
     *(s_meta*) ptr = (s_meta) {
         .kind = kind,

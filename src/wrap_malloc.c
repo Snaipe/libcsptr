@@ -33,17 +33,20 @@
 
 #ifdef SMALLOC_WRAP_MALLOC
 void *(*real_malloc)(size_t) = NULL;
+void *(*real_realloc)(size_t) = NULL;
 void (*real_free)(void *) = NULL;
 
 __attribute__ ((constructor))
 static void initialize_handles(void) {
 # if defined(__APPLE__)
     void *handle = dlopen("libc.dylib", RTLD_NOW);
-    real_malloc = (__typeof__(real_malloc)) dlsym(handle, "malloc");
-    real_free   = (__typeof__(real_free))   dlsym(handle, "free");
+    real_malloc  = (__typeof__(real_malloc))  dlsym(handle, "malloc");
+    real_realloc = (__typeof__(real_realloc)) dlsym(handle, "realloc");
+    real_free    = (__typeof__(real_free))    dlsym(handle, "free");
 # elif defined(__unix__)
-    real_malloc = (__typeof__(real_malloc)) dlsym(RTLD_NEXT, "malloc");
-    real_free   = (__typeof__(real_free))   dlsym(RTLD_NEXT, "free");
+    real_malloc  = (__typeof__(real_malloc))  dlsym(RTLD_NEXT, "malloc");
+    real_realloc = (__typeof__(real_realloc)) dlsym(RTLD_NEXT, "realloc");
+    real_free    = (__typeof__(real_free))    dlsym(RTLD_NEXT, "free");
 # else
 #  error malloc wrapping not supported on non-*nix systems.
 # endif
@@ -60,7 +63,17 @@ void *malloc(size_t size) {
     return smalloc(size, 0, UNIQUE, 0);
 }
 
+__attribute__ ((malloc))
+void *calloc(size_t size, size_t nmemb) {
+    void *ptr = smalloc(size, nmemb, UNIQUE, 0);
+    memset(ptr, 0, size * nmemb);
+}
+
 void free(void *ptr) {
     sfree(ptr);
+}
+
+void *realloc(void *ptr, size_t size) {
+    return real_realloc(ptr ? get_meta(ptr) : NULL, size);
 }
 #endif /* !SMALLOC_WRAP_MALLOC */

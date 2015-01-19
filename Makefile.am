@@ -21,11 +21,12 @@ subdirincludedir = $(includedir)/csptr/
 subdirinclude_HEADERS = \
 	include/csptr/vararg.h \
 	include/csptr/apply.h \
-	include/csptr/mman.h \
+	include/csptr/smalloc.h \
 	include/csptr/array.h \
 	include/csptr/smart_ptr.h
 
 libcsptr_la_SOURCES = \
+	src/mman.h \
 	src/mman.c \
 	src/wrap_malloc.h \
 	src/wrap_malloc.c

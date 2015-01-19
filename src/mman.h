@@ -25,33 +25,31 @@
 #ifndef CSPTR_MMAN_H_
 # define CSPTR_MMAN_H_
 
-# include <stddef.h>
-# include <malloc.h>
-# include "vararg.h"
+# include "smalloc.h"
 
-enum pointer_kind {
-    UNIQUE,
-    SHARED,
-
-    ARRAY = 1 << 8
-};
-
-typedef void (*f_destructor)(void *, void *);
+# define INLINE __attribute__ ((always_inline)) inline
 
 typedef struct {
-    void *(*alloc)(size_t);
-    void (*dealloc)(void *);
-} s_allocator;
+    enum pointer_kind kind;
+    f_destructor dtor;
+#ifndef NDEBUG
+    void *ptr;
+#endif /* !NDEBUG */
+} s_meta;
 
-extern s_allocator smalloc_allocator;
+typedef struct {
+    s_meta;
+    _Atomic size_t ref_count;
+} s_meta_shared;
+
+INLINE size_t align(size_t s) {
+    return (s + (sizeof (void *) - 1)) & ~(sizeof (void *) - 1);
+}
 
 __attribute__ ((pure))
-void *get_smart_ptr_meta(void *ptr);
-void *sref(void *ptr);
-__attribute__((malloc))
-void *smalloc(size_t size, size_t nmemb, int kind, int count, ...);
-void sfree(void *ptr);
-
-# define smalloc(Size, Nmemb, Kind, Args...) smalloc(Size, Nmemb, Kind, ARG_LENGTH(Args), ## Args)
+INLINE s_meta *get_meta(void *ptr) {
+    size_t *size = (size_t *) ptr - 1;
+    return (s_meta *) ((char *) size - *size);
+}
 
 #endif /* !CSPTR_MMAN_H_ */

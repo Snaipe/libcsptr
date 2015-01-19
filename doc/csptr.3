@@ -9,7 +9,7 @@ csptr \- smart pointers for the C programming language
 .BI "void *shared_ptr(" "Type" ", ... );"
 .sp
 .B #include <csptr/smart_ptr.h>
-.B #include <csptr/mman.h>
+.B #include <csptr/smalloc.h>
 .BI "void *smalloc(size_t " "size" ", size_t " "nmemb" ", int " "kind");
 .BI "void *smalloc(size_t " "size" ", size_t " "nmemb" ", int " "kind" ", void (" "*dtor" ")(void *, void *));"
 .BI "void *smalloc(size_t " "size" ", size_t " "nmemb" ", int " "kind" ", void " "*meta" ", size_t " "metasize" );

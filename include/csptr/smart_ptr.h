@@ -26,7 +26,7 @@
 # define CSPTR_SMART_PTR_H_
 
 # include "apply.h"
-# include "mman.h"
+# include "smalloc.h"
 
 __attribute__ ((always_inline))
 inline void sfree_stack(void *ptr) {

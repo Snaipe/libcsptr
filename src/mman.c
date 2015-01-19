@@ -34,32 +34,7 @@
 #include "wrap_malloc.h"
 #undef smalloc
 
-#define INLINE __attribute__ ((always_inline)) inline
-
 s_allocator smalloc_allocator = {malloc, free};
-
-typedef struct {
-    enum pointer_kind kind;
-    f_destructor dtor;
-#ifndef NDEBUG
-    void *ptr;
-#endif /* !NDEBUG */
-} s_meta;
-
-typedef struct {
-    s_meta;
-    _Atomic size_t ref_count;
-} s_meta_shared;
-
-INLINE static size_t align(size_t s) {
-    return (s + (sizeof (void *) - 1)) & ~(sizeof (void *) - 1);
-}
-
-__attribute__ ((pure))
-INLINE static s_meta *get_meta(void *ptr) {
-    size_t *size = (size_t *) ptr - 1;
-    return (s_meta *) ((char *) size - *size);
-}
 
 __attribute__ ((pure))
 void *get_smart_ptr_meta(void *ptr) {

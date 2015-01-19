@@ -13,7 +13,7 @@ START_TEST (test_zero_size) {
     ck_assert_msg(ptr == NULL, "Expected NULL pointer to be returned.");
 } END_TEST
 
-#ifndef FIXED_SMALLOC_ALLOCATOR
+#ifndef SMALLOC_FIXED_ALLOCATOR
 START_TEST (test_alloc_failure) {
     smalloc_allocator = (s_allocator) {
         lambda(void *, (size_t s) { return NULL; }),
@@ -27,7 +27,9 @@ START_TEST (test_alloc_failure) {
 
 TFun misc_tests[] = {
     test_more_args,
+#ifndef SMALLOC_FIXED_ALLOCATOR
     test_alloc_failure,
+#endif
     test_zero_size,
     NULL
 };

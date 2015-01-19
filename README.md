@@ -1,6 +1,9 @@
 C Smart Pointers
 ================
 
+[![Build Status](https://travis-ci.org/Snaipe/c-smart-pointers.svg?branch=master)](https://travis-ci.org/Snaipe/c-smart-pointers) 
+[![Coverage Status](https://coveralls.io/repos/Snaipe/c-smart-pointers/badge.svg?branch=master)](https://coveralls.io/r/Snaipe/c-smart-pointers?branch=master)
+
 ## What this is
 
 This project is a tentative attempt to bring smart pointer constructs

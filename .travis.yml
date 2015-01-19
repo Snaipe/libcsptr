@@ -19,4 +19,4 @@ env:
     - FEATURES=""
     - FEATURES="--with-malloc-wrapper"
     - FEATURES="--with-fixed-allocator"
-    - FEATURES="---with-malloc-wrapper -with-fixed-allocator"
+    - FEATURES="--with-malloc-wrapper -with-fixed-allocator"

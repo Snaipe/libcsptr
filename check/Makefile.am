@@ -8,8 +8,6 @@ check_unit_CFLAGS = \
 
 check_unit_LDFLAGS = $(COVERAGE_LDFLAGS)
 check_unit_LDADD = $(top_builddir)/libcsptr.la @CHECK_LIBS@
-check_unit_LDFLAGS = -ldl
-
 check_unit_SOURCES = \
 	test/test.c \
 	test/scalar.c \

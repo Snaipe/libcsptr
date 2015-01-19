@@ -5,6 +5,7 @@
 START_TEST (test_pointer_valid) {
     smart int *a = unique_ptr(int);
     assert_valid_ptr(a);
+    ck_assert_msg(get_smart_ptr_meta(a) == NULL, "Expected pointer to have no metadata");
 } END_TEST
 
 START_TEST (test_dtor_run) {
@@ -12,6 +13,7 @@ START_TEST (test_dtor_run) {
     f_destructor dtor = lambda(void, (void *ptr, void *meta) { dtor_run = 1; });
     int *a = unique_ptr(int, dtor);
     assert_valid_ptr(a);
+    ck_assert_msg(get_smart_ptr_meta(a) == NULL, "Expected pointer to have no metadata");
     sfree(a);
     ck_assert_msg(dtor_run, "Expected destructor to run");
 } END_TEST

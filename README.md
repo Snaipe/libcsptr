@@ -2,7 +2,8 @@ C Smart Pointers
 ================
 
 [![Build Status](https://travis-ci.org/Snaipe/c-smart-pointers.svg?branch=master)](https://travis-ci.org/Snaipe/c-smart-pointers) 
-[![Coverage Status](https://coveralls.io/repos/Snaipe/c-smart-pointers/badge.svg?branch=master)](https://coveralls.io/r/Snaipe/c-smart-pointers?branch=master)
+[![Coverage Status](https://coveralls.io/repos/Snaipe/c-smart-pointers/badge.svg?branch=master)](https://coveralls.io/r/Snaipe/c-smart-pointers?branch=master) 
+[![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](https://github.com/Snaipe/c-smart-pointers/blob/master/LICENSE)
 
 ## What this is
 

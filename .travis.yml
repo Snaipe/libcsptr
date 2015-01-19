@@ -8,8 +8,15 @@ before_install:
   - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 90
   - sudo pip install cpp-coveralls
 script:
-  - autoreconf -i && ./configure --enable-gcov CFLAGS="-g -O0" && make && make check
+  - autoreconf -i && ./configure ${FEATURES} --enable-gcov CFLAGS="-g -O0" && make && make check
 after_success:
   - coveralls --gcov gcov-4.9 --exclude check --gcov-options '\-lp' -b .
 after_failure:
   - cat $(find check -iname '*.log') /dev/null
+
+env:
+  matrix:
+    - FEATURES=""
+    - FEATURES="--with-malloc-wrapper"
+    - FEATURES="--with-fixed-allocator"
+    - FEATURES="---with-malloc-wrapper -with-fixed-allocator"

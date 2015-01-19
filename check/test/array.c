@@ -4,6 +4,7 @@
 
 #define ARRAY_SIZE 25
 
+__attribute__((always_inline))
 inline void assert_valid_array(void *ptr, size_t len, size_t size) {
     assert_valid_ptr(ptr);
     ck_assert_msg(array_length(ptr) == len,

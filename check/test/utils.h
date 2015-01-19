@@ -4,11 +4,13 @@
 #include <check.h>
 #include <inttypes.h>
 
+__attribute__((always_inline))
 inline int is_aligned(void *ptr) {
     uintptr_t off = (uintptr_t) ptr;
     return !(off % sizeof (void *));
 }
 
+__attribute__((always_inline))
 inline void assert_valid_ptr(void *ptr) {
     ck_assert_msg(ptr != NULL,
             "Expected unique_ptr to return a non-null pointer.");
@@ -17,6 +19,7 @@ inline void assert_valid_ptr(void *ptr) {
             "Expected unique_ptr to return an aligned pointer.");
 }
 
+__attribute__((always_inline))
 inline TCase *make_test_case(const char *name, TFun func[]) {
     TCase *tc = tcase_create(name);
     for (TFun *f = func; *f != NULL; ++f)
@@ -32,6 +35,7 @@ struct meta {
 
 extern const struct meta m;
 
+__attribute__((always_inline))
 inline void assert_valid_meta(void *ptr, const struct meta *m, const struct meta *m2) {
     ck_assert_msg(m2 != NULL, "Expected metadata to be present");
     ck_assert_msg(m != m2, "Expected metadata to be copied");

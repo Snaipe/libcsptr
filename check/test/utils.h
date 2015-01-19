@@ -2,6 +2,7 @@
 # define UTILS_H_
 
 #include <check.h>
+#include <inttypes.h>
 
 inline int is_aligned(void *ptr) {
     uintptr_t off = (uintptr_t) ptr;

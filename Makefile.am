@@ -27,8 +27,6 @@ subdirinclude_HEADERS = \
 
 libcsptr_la_SOURCES = \
 	src/mman.h \
-	src/mman.c \
-	src/wrap_malloc.h \
-	src/wrap_malloc.c
+	src/mman.c
 
 man3_MANS = doc/csptr.3

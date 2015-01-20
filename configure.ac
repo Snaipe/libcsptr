@@ -27,14 +27,6 @@ AC_ARG_WITH([fixed-allocator],
     [AC_DEFINE([SMALLOC_FIXED_ALLOCATOR], [1], [Define if malloc should always be used.])],
     [])
 
-AC_ARG_WITH([malloc-wrapper],
-    [AS_HELP_STRING([--with-malloc-wrapper], [Make smart pointers compatible with a pass to free, and make malloc return a smart pointer.])],
-    [AC_DEFINE([SMALLOC_WRAP_MALLOC], [1], [Define if malloc should be wrapped])
-     FLAG_WRAP_MALLOC="-Wl,--no-as-needed -ldl"
-     AC_SUBST([FLAG_WRAP_MALLOC])
-    ],
-    [])
-
 AC_ARG_ENABLE([gcov],
   [AS_HELP_STRING([--enable-gcov],
     [Compile the project with converage enabled])],

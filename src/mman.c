@@ -31,7 +31,6 @@
 #include "config.h"
 #include "mman.h"
 #include "array.h"
-#include "wrap_malloc.h"
 #undef smalloc
 
 s_allocator smalloc_allocator = {malloc, free};
@@ -63,11 +62,7 @@ __attribute__ ((malloc))
 INLINE static void *alloc_entry(size_t head, size_t size, size_t metasize) {
     const size_t totalsize = head + size + metasize + sizeof (size_t);
 #ifdef SMALLOC_FIXED_ALLOCATOR
-# ifdef SMALLOC_WRAP_MALLOC
-    return real_malloc(totalsize);
-# else /* !SMALLOC_WRAP_MALLOC */
     return malloc(totalsize);
-# endif /* !SMALLOC_WRAP_MALLOC */
 #else /* !SMALLOC_FIXED_ALLOCATOR */
     return smalloc_allocator.alloc(totalsize);
 #endif /* !SMALLOC_FIXED_ALLOCATOR */
@@ -85,11 +80,7 @@ INLINE static void dealloc_entry(s_meta *meta, void *ptr) {
     }
 
 #ifdef SMALLOC_FIXED_ALLOCATOR
-# ifdef SMALLOC_WRAP_MALLOC
-    real_free(meta);
-# else /* !SMALLOC_WRAP_MALLOC */
     free(meta);
-# endif /* !SMALLOC_WRAP_MALLOC */
 #else /* !SMALLOC_FIXED_ALLOCATOR */
     smalloc_allocator.dealloc(meta);
 #endif /* !SMALLOC_FIXED_ALLOCATOR */

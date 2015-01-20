@@ -1,3 +1,10 @@
+2015-01-20  Franklin "Snaipe" Mathieu  <franklinmathieu@gmail.com>
+
+    * configure.ac: Removed --with-malloc-wrapper ./configure flag.
+    * src/wrap_malloc.{c,h}: Removed malloc/free wrappers.
+    * check/*: Added unit tests & coverage reports.
+    * mman.c: Fix for shared pointers accessing the wrong metadata.
+
 2015-01-14  Franklin "Snaipe" Mathieu  <franklinmathieu@gmail.com>
 
     * configure.ac: Added --with-malloc-wrapper and --with-fixed-allocator

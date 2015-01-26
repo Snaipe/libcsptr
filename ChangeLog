@@ -1,3 +1,8 @@
+2015-01-26  Franklin "Snaipe" Mathieu  <franklinmathieu@gmail.com>
+
+    * include/csptr/smart_ptr.h: Smart pointers now take a mandatory value.
+    * doc/csptr.3: Fixed some typos and updated to latest interface.
+
 2015-01-20  Franklin "Snaipe" Mathieu  <franklinmathieu@gmail.com>
 
     * configure.ac: Removed --with-malloc-wrapper ./configure flag.

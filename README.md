@@ -39,8 +39,9 @@ to the (GNU) C programming language.
     #include <csptr/smart_ptr.h>
 
     int main(void) {
-        smart int *some_int = unique_ptr(int);
-        *some_int = 1;
+        // some_int is an unique_ptr to an int with a value of 1.
+        // parenthesis around the value are mandatory.
+        smart int *some_int = unique_ptr(int, (1));
 
         printf("%p = %d\n", some_int, *some_int);
 
@@ -85,10 +86,10 @@ to the (GNU) C programming language.
     }
 
     int main(void) {
-        smart struct log_file *log = unique_ptr(struct log_file, cleanup_log_file);
-        *log = (struct log_file) {
-            .fd = open("/dev/null", O_WRONLY | O_APPEND)
-        };
+        smart struct log_file *log = unique_ptr(struct log_file, ({
+                .fd = open("/dev/null", O_WRONLY | O_APPEND),
+                // ...
+            }), cleanup_log_file);
 
         write(log->fd, "Hello", 5);
 
@@ -112,15 +113,15 @@ to the (GNU) C programming language.
     int main(void) {
         // Destructors for array types are run on every element of the
         // array before destruction.
-        smart int *ints = unique_ptr(int[10], print_int);
+        smart int *ints = unique_ptr(int[5], ({5, 4, 3, 2, 1}), print_int);
+        // ints == {5, 4, 3, 2, 1}
 
         // Smart arrays are length-aware
         for (size_t i = 0; i < array_length(ints); ++i) {
             ints[i] = i;
         }
+        // ints == {1, 2, 3, 4, 5}
 
-        // Not initializing the array before getting out of scope
-        // is undefined behavior: beware !
         return 0;
     }
     ```
@@ -160,7 +161,7 @@ to the (GNU) C programming language.
     }
 
     struct log_file *open_log(const char *path) {
-        smart struct log_file *log = shared_ptr(struct log_file, close_log);
+        smart struct log_file *log = shared_ptr(struct log_file, ({0}), close_log);
         if (!log) // failure to allocate
             return NULL; // nothing happens, destructor is not called
 
@@ -200,12 +201,11 @@ to the (GNU) C programming language.
     }
 
     int main(void) {
-        smart C *c = unique_ptr(C, destroy_c);
-        *c = (C) {
-            .a = unique_ptr(A),
-            .b = unique_ptr(B),
-            .some_int = 42
-        };
+        smart C *c = unique_ptr(C, ({
+                .a = unique_ptr(A, ({})),
+                .b = unique_ptr(B, ({})),
+                .some_int = 42
+            }), destroy_c);
         return 0; // c->a, c->b, and c are freed
     }
     ```
@@ -217,7 +217,8 @@ A. Because when I first started this, I was working on a C project.
    Also, because it's fun.
 
 **Q. Can I use this on a serious project ?**  
-A. Yes, but the project has yet to fully mature, beware of bugs!
+A. Yes, but as this project has not been widely used, there might be
+   some bugs. Beware!
 
 **Q. How did you make this ?**  
 A. Here's a [link to my blog post](http://snaipe.me/c/c-smart-pointers/) on the matter.

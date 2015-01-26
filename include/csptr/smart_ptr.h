@@ -25,6 +25,7 @@
 #ifndef CSPTR_SMART_PTR_H_
 # define CSPTR_SMART_PTR_H_
 
+# include <string.h>
 # include "apply.h"
 # include "smalloc.h"
 
@@ -35,18 +36,26 @@ inline void sfree_stack(void *ptr) {
     *real_ptr = NULL;
 }
 
+# define NOPAREN_(...) __VA_ARGS__
+
 # define smart __attribute__ ((cleanup(sfree_stack)))
-# define smart_ptr(Type, Kind, Args...)                                     \
+# define smart_ptr(Type, Val, Kind, Args...)                                \
     ({                                                                      \
         const __typeof__(Type[1]) dummy;                                    \
-        __builtin_choose_expr(sizeof (dummy[0]) == sizeof (dummy),          \
-            smalloc(sizeof (Type), 0, Kind, ## Args),                       \
-            smalloc(sizeof (dummy[0]),                                      \
-                sizeof (dummy) / sizeof (dummy[0]), Kind, ## Args));        \
+        void *var =                                                         \
+            __builtin_choose_expr(sizeof (dummy[0]) == sizeof (dummy),      \
+                smalloc(sizeof (Type), 0, Kind, ## Args),                   \
+                smalloc(sizeof (dummy[0]),                                  \
+                    sizeof (dummy) / sizeof (dummy[0]), Kind, ## Args));    \
+        if (var != NULL) {                                                  \
+            const __typeof__(Type) val = NOPAREN_ Val;                      \
+            memcpy(var, &val, sizeof (Type));                               \
+        }                                                                   \
+        var;                                                                \
     })
 
-# define shared_ptr(Type, Args...) smart_ptr(Type, SHARED , ## Args)
-# define unique_ptr(Type, Args...) smart_ptr(Type, UNIQUE , ## Args)
+# define shared_ptr(Type, Val, Args...) smart_ptr(Type, Val, SHARED , ## Args)
+# define unique_ptr(Type, Val, Args...) smart_ptr(Type, Val, UNIQUE , ## Args)
 
 # define DESTRUCTOR(Name, Attr, Type, Args...)                      \
     static void Name##_impl(__attribute__((unused)) Type *ptr,      \

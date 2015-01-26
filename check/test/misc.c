@@ -4,7 +4,7 @@
 #include "utils.h"
 
 START_TEST (test_more_args) {
-    smart void *ptr = unique_ptr(int, NULL, NULL, NULL, NULL);
+    smart void *ptr = unique_ptr(int, (42), NULL, NULL, NULL, NULL);
     assert_valid_ptr(ptr);
 } END_TEST
 
@@ -19,7 +19,7 @@ START_TEST (test_alloc_failure) {
         lambda(void *, (size_t s) { return NULL; }),
         lambda(void, (void *ptr) {})
     };
-    smart void *ptr = unique_ptr(int);
+    smart void *ptr = unique_ptr(int, (42));
     ck_assert_msg(ptr == NULL, "Expected NULL pointer to be returned.");
     smalloc_allocator = (s_allocator) {malloc, free};
 } END_TEST

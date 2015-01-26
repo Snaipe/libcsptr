@@ -5,8 +5,8 @@ csptr \- smart pointers for the C programming language
 .nf
 .B #include <csptr/smart_ptr.h>
 .sp
-.BI "void *unique_ptr(" Type ", ... );"
-.BI "void *shared_ptr(" "Type" ", ... );"
+.BI "void *unique_ptr(" "Type" ", " "(Value)" ", ... );"
+.BI "void *shared_ptr(" "Type" ", " "(Value)" ", ... );"
 .sp
 .B #include <csptr/smart_ptr.h>
 .B #include <csptr/smalloc.h>
@@ -24,8 +24,9 @@ The
 function calls an allocator
 .BR "" ( malloc (3)
 by default), such that the returned pointer is a smart pointer.
-.IR "The memory is not initialized" .
-If
+.IR "The memory is not initialized" ,
+and great care should be taken to initialize it before destruction if a
+destructor has been specified. If
 .I size
 is 0, then
 .BR smalloc ()
@@ -66,7 +67,11 @@ macros expand to a call to the
 .BR smalloc ()
 function with either UNIQUE or SHARED for the
 .I kind
-parameter. Additional parameters are passed as-is to the function.
+parameter, then sets the newly returned memory with
+.IR Value .
+Parenthesis around
+.I Value
+are mandatory. Additional parameters are passed as-is to the function.
 If
 .I Type
 is an array type, then
@@ -84,7 +89,7 @@ shall be 0.
 The
 .BR smalloc ()
 function return a pointer to the newly allocated memory.
-On error, it return NULL.
+On error, it returns NULL.
 NULL may also be returned by a successful call to
 .BR smalloc ()
 with a

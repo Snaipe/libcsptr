@@ -25,8 +25,7 @@
 #ifndef CSPTR_SMALLOC_H_
 # define CSPTR_SMALLOC_H_
 
-# include <stddef.h>
-# include <malloc.h>
+# include <stdlib.h>
 # include "vararg.h"
 
 enum pointer_kind {

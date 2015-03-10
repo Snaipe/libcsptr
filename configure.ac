@@ -13,7 +13,7 @@ AC_CONFIG_MACRO_DIR([m4])
 AC_PROG_CC
 AM_PROG_CC_C_O
 
-PKG_CHECK_MODULES([CHECK], [check >= 0.9.6])
+AC_CHECK_LIB([check], [srunner_run_all], [], [Could not find libcheck.], [])
 
 AC_PROG_LIBTOOL
 AC_PROG_INSTALL

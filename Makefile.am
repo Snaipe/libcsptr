@@ -29,4 +29,4 @@ libcsptr_la_SOURCES = \
 	src/mman.h \
 	src/mman.c
 
-man3_MANS = doc/csptr.3
+dist_man3_MANS = doc/csptr.3

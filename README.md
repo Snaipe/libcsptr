@@ -196,7 +196,7 @@ to the (GNU) C programming language.
         B *b;
     } C;
 
-    DESTRUCTOR(destroy_c, static, a, b) {
+    DESTRUCTOR(destroy_c, static,C, a, b) {
         printf("some_int = %d at destruction.\n", ptr->some_int); // why not ?
     }
 

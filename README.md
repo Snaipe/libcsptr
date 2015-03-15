@@ -11,9 +11,12 @@ C Smart Pointers
 This project is a tentative attempt to bring smart pointer constructs
 to the (GNU) C programming language.
 
+### Features
+
 * `unique_ptr`, `shared_ptr` macros, and `smart` type attribute
 * Destructor support for cleanup
 * Custom variable metadata on allocation
+* Cross-platform: tested under linux 3.18.6-1, Mac OS X Yosemite 10.10, and Windows 7 (with MinGW and the Cygwin port of GCC)
 
 ## Installing
 

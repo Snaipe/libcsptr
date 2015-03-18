@@ -47,7 +47,6 @@ To compile the library, GCC 4.9+ is needed.
 
     int main(void) {
         // some_int is an unique_ptr to an int with a value of 1.
-        // parenthesis around the value are mandatory.
         smart int *some_int = unique_ptr(int, 1);
 
         printf("%p = %d\n", some_int, *some_int);

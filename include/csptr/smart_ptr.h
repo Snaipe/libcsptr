@@ -36,39 +36,35 @@ inline void sfree_stack(void *ptr) {
     *real_ptr = NULL;
 }
 
-# define NOPAREN_(...) __VA_ARGS__
+# define ARGS_ args.dtor, args.meta.ptr, args.meta.size
 
 # define smart __attribute__ ((cleanup(sfree_stack)))
-# define smart_ptr(Type, Val, Kind, Args...)                                \
+# define smart_ptr(Kind, Type, Args...)                                     \
     ({                                                                      \
+        struct s_tmp {                                                      \
+            int sentinel_;                                                  \
+            __typeof__(Type) value;                                         \
+            f_destructor dtor;                                              \
+            struct {                                                        \
+                const void *ptr;                                            \
+                size_t size;                                                \
+            } meta;                                                         \
+        } args = {                                                          \
+            .sentinel_ = 0,                                                 \
+            Args                                                            \
+        };                                                                  \
         const __typeof__(Type[1]) dummy;                                    \
         void *var =                                                         \
             __builtin_choose_expr(sizeof (dummy[0]) == sizeof (dummy),      \
-                smalloc(sizeof (Type), 0, Kind, ## Args),                   \
+                smalloc(sizeof (Type), 0, Kind, ARGS_),                     \
                 smalloc(sizeof (dummy[0]),                                  \
-                    sizeof (dummy) / sizeof (dummy[0]), Kind, ## Args));    \
-        if (var != NULL) {                                                  \
-            const __typeof__(Type) val = NOPAREN_ Val;                      \
-            memcpy(var, &val, sizeof (Type));                               \
-        }                                                                   \
+                    sizeof (dummy) / sizeof (dummy[0]), Kind, ARGS_));      \
+        if (var != NULL)                                                    \
+            memcpy(var, &args.value, sizeof (Type));                        \
         var;                                                                \
     })
 
-# define shared_ptr(Type, Val, Args...) smart_ptr(Type, Val, SHARED , ## Args)
-# define unique_ptr(Type, Val, Args...) smart_ptr(Type, Val, UNIQUE , ## Args)
-
-# define DESTRUCTOR(Name, Attr, Type, Args...)                      \
-    static void Name##_impl(__attribute__((unused)) Type *ptr,      \
-                            __attribute__((unused)) void *meta);    \
-    Attr void Name(void *ptr, void *meta) {                         \
-        APPLY(DESTROY_MEMBER_, Type, Args)                          \
-        Name##_impl(ptr, meta);                                     \
-    }                                                               \
-    static void Name##_impl(__attribute__((unused)) Type *ptr,      \
-                            __attribute__((unused)) void *meta)
-
-# define DESTROY_MEMBER_(Type, Member, ...) \
-    sfree(ptr + offsetof(Type, Member));    \
-    *(ptr + offsetof(Type, Member)) = NULL;
+# define shared_ptr(Type, Args...) smart_ptr(SHARED, Type, Args)
+# define unique_ptr(Type, Args...) smart_ptr(UNIQUE, Type, Args)
 
 #endif /* !CSPTR_SMART_PTR_H_ */

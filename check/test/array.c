@@ -14,7 +14,7 @@ inline void assert_valid_array(void *ptr, size_t len, size_t size) {
 }
 
 START_TEST (test_array) {
-    smart int *arr = unique_ptr(int[ARRAY_SIZE], ({}));
+    smart int *arr = unique_ptr(int[ARRAY_SIZE], {});
     assert_valid_array(arr, ARRAY_SIZE, sizeof (int));
 } END_TEST
 
@@ -26,7 +26,7 @@ START_TEST (test_array_dtor_run) {
             dtor_run++;
         });
 
-    arr = unique_ptr(int[ARRAY_SIZE], ({}), dtor);
+    arr = unique_ptr(int[ARRAY_SIZE], {}, dtor);
     assert_valid_array(arr, ARRAY_SIZE, sizeof (int));
 
     sfree(arr);
@@ -34,7 +34,7 @@ START_TEST (test_array_dtor_run) {
 } END_TEST
 
 START_TEST (test_array_meta) {
-    smart int *arr = unique_ptr(int[ARRAY_SIZE], ({}), &m, sizeof (m));
+    smart int *arr = unique_ptr(int[ARRAY_SIZE], {}, .meta = { &m, sizeof (m) });
     assert_valid_array(arr, ARRAY_SIZE, sizeof (int));
     assert_valid_meta(arr, &m, array_user_meta(arr));
 } END_TEST
@@ -43,7 +43,7 @@ START_TEST (test_array_dtor_run_with_meta) {
     int dtor_run = 0;
     f_destructor dtor = lambda(void, (void *ptr, void *meta) { dtor_run = 1; });
 
-    int *arr = unique_ptr(int[ARRAY_SIZE], ({}), dtor, &m, sizeof (m));
+    int *arr = unique_ptr(int[ARRAY_SIZE], {}, dtor, { &m, sizeof (m) });
     assert_valid_array(arr, ARRAY_SIZE, sizeof (int));
     assert_valid_meta(arr, &m, array_user_meta(arr));
 

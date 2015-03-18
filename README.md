@@ -124,7 +124,7 @@ To compile the library, GCC 4.9+ is needed.
 
         // Smart arrays are length-aware
         for (size_t i = 0; i < array_length(ints); ++i) {
-            ints[i] = i;
+            ints[i] = i + 1;
         }
         // ints == {1, 2, 3, 4, 5}
 

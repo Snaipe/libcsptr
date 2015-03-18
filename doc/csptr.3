@@ -1,4 +1,4 @@
-.TH CSPTR 3  2015-01-09 "" ""
+.TH CSPTR 3  2015-03-18 "" ""
 .SH NAME
 csptr \- smart pointers for the C programming language
 .SH SYNOPSIS
@@ -12,7 +12,6 @@ csptr \- smart pointers for the C programming language
 .B #include <csptr/smalloc.h>
 .BI "void *smalloc(size_t " "size" ", size_t " "nmemb" ", int " "kind");
 .BI "void *smalloc(size_t " "size" ", size_t " "nmemb" ", int " "kind" ", void (" "*dtor" ")(void *, void *));"
-.BI "void *smalloc(size_t " "size" ", size_t " "nmemb" ", int " "kind" ", struct { void *, size_t } " "meta" );
 .BI "void *smalloc(size_t " "size" ", size_t " "nmemb" ", int " "kind" ", void (" "*dtor" ")(void *, void *), struct { void *, size_t } " "meta" );
 .BI "void sfree(void " "*ptr" );
 .BI "void *sref(void " "*ptr" );

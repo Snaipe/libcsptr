@@ -1,3 +1,11 @@
+2015-03-18  Franklin "Snaipe" Mathieu  <franklinmathieu@gmail.com>
+
+    * include/csptr/{smart_ptr.h,apply.h}: Removed the destructor helper macro
+    * include/csptr/smart_ptr.h: Changed the vararg usage to struct vararg
+    This change is **NOT** backward-compatible. Parenthesis around the value
+    were removed with this change, and metadata is no longer passed as two
+    separate parameters.
+
 2015-01-26  Franklin "Snaipe" Mathieu  <franklinmathieu@gmail.com>
 
     * include/csptr/smart_ptr.h: Smart pointers now take a mandatory value.

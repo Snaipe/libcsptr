@@ -26,7 +26,6 @@
 # define CSPTR_SMART_PTR_H_
 
 # include <string.h>
-# include "apply.h"
 # include "smalloc.h"
 
 __attribute__ ((always_inline))

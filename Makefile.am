@@ -20,7 +20,6 @@ EXTRA_DIST = LICENSE README.md
 subdirincludedir = $(includedir)/csptr/
 subdirinclude_HEADERS = \
 	include/csptr/vararg.h \
-	include/csptr/apply.h \
 	include/csptr/smalloc.h \
 	include/csptr/array.h \
 	include/csptr/smart_ptr.h

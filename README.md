@@ -20,12 +20,16 @@ to the (GNU) C programming language.
 
 ## Installing
 
-### Prerequisites
+### With a package manager
 
-* To compile the library, GCC 4.9+ is needed.
-* To compile any project with the library, Clang or GCC are needed.
+* Mac OS X: `brew install snaipe/soft/libcsptr`
 
-### Installation
+### Building from source
+#### Prerequisites
+
+To compile the library, GCC 4.9+ is needed.
+
+#### Installation
 
 1. Clone this repository
 2. run `./autogen.sh && ./configure --prefix=$HOME/ && make && make install`

@@ -5,15 +5,15 @@ csptr \- smart pointers for the C programming language
 .nf
 .B #include <csptr/smart_ptr.h>
 .sp
-.BI "void *unique_ptr(" "Type" ", " "(Value)" ", ... );"
-.BI "void *shared_ptr(" "Type" ", " "(Value)" ", ... );"
+.BI "void *unique_ptr(" "Type" ", " "Value" ", ... );"
+.BI "void *shared_ptr(" "Type" ", " "Value" ", ... );"
 .sp
 .B #include <csptr/smart_ptr.h>
 .B #include <csptr/smalloc.h>
 .BI "void *smalloc(size_t " "size" ", size_t " "nmemb" ", int " "kind");
 .BI "void *smalloc(size_t " "size" ", size_t " "nmemb" ", int " "kind" ", void (" "*dtor" ")(void *, void *));"
-.BI "void *smalloc(size_t " "size" ", size_t " "nmemb" ", int " "kind" ", void " "*meta" ", size_t " "metasize" );
-.BI "void *smalloc(size_t " "size" ", size_t " "nmemb" ", int " "kind" ", void (" "*dtor" ")(void *, void *), void " "*meta" ", size_t " "metasize" );
+.BI "void *smalloc(size_t " "size" ", size_t " "nmemb" ", int " "kind" ", struct { void *, size_t } " "meta" );
+.BI "void *smalloc(size_t " "size" ", size_t " "nmemb" ", int " "kind" ", void (" "*dtor" ")(void *, void *), struct { void *, size_t } " "meta" );
 .BI "void sfree(void " "*ptr" );
 .BI "void *sref(void " "*ptr" );
 .fi
@@ -69,9 +69,7 @@ function with either UNIQUE or SHARED for the
 .I kind
 parameter, then sets the newly returned memory with
 .IR Value .
-Parenthesis around
-.I Value
-are mandatory. Additional parameters are passed as-is to the function.
+Additional parameters are passed as-is to the function.
 If
 .I Type
 is an array type, then

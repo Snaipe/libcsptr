@@ -48,7 +48,7 @@ To compile the library, GCC 4.9+ is needed.
     int main(void) {
         // some_int is an unique_ptr to an int with a value of 1.
         // parenthesis around the value are mandatory.
-        smart int *some_int = unique_ptr(int, (1));
+        smart int *some_int = unique_ptr(int, 1);
 
         printf("%p = %d\n", some_int, *some_int);
 
@@ -93,10 +93,10 @@ To compile the library, GCC 4.9+ is needed.
     }
 
     int main(void) {
-        smart struct log_file *log = unique_ptr(struct log_file, ({
+        smart struct log_file *log = unique_ptr(struct log_file, {
                 .fd = open("/dev/null", O_WRONLY | O_APPEND),
                 // ...
-            }), cleanup_log_file);
+            }, cleanup_log_file);
 
         write(log->fd, "Hello", 5);
 
@@ -120,7 +120,7 @@ To compile the library, GCC 4.9+ is needed.
     int main(void) {
         // Destructors for array types are run on every element of the
         // array before destruction.
-        smart int *ints = unique_ptr(int[5], ({5, 4, 3, 2, 1}), print_int);
+        smart int *ints = unique_ptr(int[5], {5, 4, 3, 2, 1}, print_int);
         // ints == {5, 4, 3, 2, 1}
 
         // Smart arrays are length-aware
@@ -168,7 +168,7 @@ To compile the library, GCC 4.9+ is needed.
     }
 
     struct log_file *open_log(const char *path) {
-        smart struct log_file *log = shared_ptr(struct log_file, ({0}), close_log);
+        smart struct log_file *log = shared_ptr(struct log_file, {0}, close_log);
         if (!log) // failure to allocate
             return NULL; // nothing happens, destructor is not called
 
@@ -185,35 +185,22 @@ To compile the library, GCC 4.9+ is needed.
         return 0; // file descriptor is closed, log is freed
     }
     ```
-* Destructor macro helper:
+* Using named parameters:
     ```c
     #include <csptr/smart_ptr.h>
 
-    typedef struct {
-        // ...
-    } A;
-
-    typedef struct {
-        // ...
-    } B;
-
-    typedef struct {
-        A *a;
-        int some_int;
-        B *b;
-    } C;
-
-    DESTRUCTOR(destroy_c, static, C, a, b) {
-        printf("some_int = %d at destruction.\n", ptr->some_int); // why not ?
-    }
+    void nothing(void *ptr, void *meta) {}
 
     int main(void) {
-        smart C *c = unique_ptr(C, ({
-                .a = unique_ptr(A, ({})),
-                .b = unique_ptr(B, ({})),
-                .some_int = 42
-            }), destroy_c);
-        return 0; // c->a, c->b, and c are freed
+        struct { int a; } m = { 1 };
+
+        smart int *i = unique_ptr(int,
+                .dtor = nothing,
+                .value = 42,
+                .meta = { &m, sizeof (m) }
+            );
+
+        return 0;
     }
     ```
 

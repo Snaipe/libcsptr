@@ -26,7 +26,6 @@
 # define CSPTR_SMALLOC_H_
 
 # include <stdlib.h>
-# include "vararg.h"
 
 enum pointer_kind {
     UNIQUE,
@@ -44,13 +43,26 @@ typedef struct {
 
 extern s_allocator smalloc_allocator;
 
+typedef struct {
+    int sentinel_;
+    size_t size;
+    size_t nmemb;
+    enum pointer_kind kind;
+    f_destructor dtor;
+    struct {
+        const void *data;
+        size_t size;
+    } meta;
+} s_smalloc_args;
+
 __attribute__ ((pure))
 void *get_smart_ptr_meta(void *ptr);
 void *sref(void *ptr);
 __attribute__((malloc))
-void *smalloc(size_t size, size_t nmemb, int kind, int count, ...);
+void *smalloc(s_smalloc_args *args);
 void sfree(void *ptr);
 
-# define smalloc(Size, Nmemb, Kind, Args...) smalloc(Size, Nmemb, Kind, ARG_LENGTH(Args), ## Args)
+# define smalloc(...) \
+    smalloc(&(s_smalloc_args) { .sentinel_ = 0, __VA_ARGS__ })
 
 #endif /* !CSPTR_SMALLOC_H_ */

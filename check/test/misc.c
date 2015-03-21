@@ -3,11 +3,6 @@
 #include "config.h"
 #include "utils.h"
 
-START_TEST (test_more_args) {
-    smart void *ptr = smalloc(sizeof (int), 0, UNIQUE, NULL, NULL, NULL, NULL);
-    assert_valid_ptr(ptr);
-} END_TEST
-
 START_TEST (test_zero_size) {
     void *ptr = smalloc(0, 0, UNIQUE);
     ck_assert_msg(ptr == NULL, "Expected NULL pointer to be returned.");
@@ -26,7 +21,6 @@ START_TEST (test_alloc_failure) {
 #endif
 
 TFun misc_tests[] = {
-    test_more_args,
 #ifndef SMALLOC_FIXED_ALLOCATOR
     test_alloc_failure,
 #endif

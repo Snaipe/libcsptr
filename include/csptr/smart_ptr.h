@@ -35,7 +35,7 @@ inline void sfree_stack(void *ptr) {
     *real_ptr = NULL;
 }
 
-# define ARGS_ args.dtor, args.meta.ptr, args.meta.size
+# define ARGS_ args.dtor, { args.meta.ptr, args.meta.size }
 
 # define smart __attribute__ ((cleanup(sfree_stack)))
 # define smart_ptr(Kind, Type, Args...)                                     \

@@ -39,7 +39,7 @@ typedef struct {
 
 typedef struct {
     s_meta;
-    _Atomic size_t ref_count;
+    size_t ref_count;
 } s_meta_shared;
 
 INLINE size_t align(size_t s) {

@@ -24,7 +24,7 @@
 
 #include <errno.h>
 #include <stdarg.h>
-#include <stdatomic.h>
+#include <stdint.h>
 #include <string.h>
 #include <assert.h>
 
@@ -34,6 +34,28 @@
 #undef smalloc
 
 s_allocator smalloc_allocator = {malloc, free};
+
+__attribute__ ((always_inline))
+static inline size_t atomic_add(size_t *count, const size_t limit, const size_t val) {
+    size_t old_count, new_count;
+    do {
+      old_count = *count;
+      if (old_count == limit)
+          abort();
+      new_count = old_count + val;
+    } while (!__sync_bool_compare_and_swap(count, old_count, new_count));
+    return new_count;
+}
+
+__attribute__ ((always_inline))
+static inline size_t atomic_increment(size_t *count) {
+    return atomic_add(count, SIZE_MAX, 1);
+}
+
+__attribute__ ((always_inline))
+static inline size_t atomic_decrement(size_t *count) {
+    return atomic_add(count, 0, -1);
+}
 
 __attribute__ ((pure))
 void *get_smart_ptr_meta(void *ptr) {
@@ -54,7 +76,7 @@ void *sref(void *ptr) {
     s_meta *meta = get_meta(ptr);
     assert(meta->ptr == ptr);
     assert(meta->kind == SHARED);
-    ((s_meta_shared *) meta)->ref_count++;
+    atomic_increment(&((s_meta_shared *) meta)->ref_count);
     return ptr;
 }
 
@@ -116,7 +138,7 @@ static void *smalloc_impl(s_smalloc_args *args) {
     };
 
     if (args->kind & SHARED)
-        ptr->ref_count = ATOMIC_VAR_INIT(1);
+        ptr->ref_count = 1;
 
     return sz + 1;
 }
@@ -150,7 +172,7 @@ void sfree(void *ptr) {
     s_meta *meta = get_meta(ptr);
     assert(meta->ptr == ptr);
 
-    if (meta->kind == SHARED && --((s_meta_shared *) meta)->ref_count)
+    if (meta->kind == SHARED && atomic_decrement(&((s_meta_shared *) meta)->ref_count))
         return;
 
     dealloc_entry(meta, ptr);

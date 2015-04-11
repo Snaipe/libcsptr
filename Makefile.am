@@ -1,5 +1,8 @@
 ACLOCAL_AMFLAGS = -I m4
+
+if ENABLE_TESTS
 SUBDIRS = check
+endif
 
 lib_LTLIBRARIES = libcsptr.la
 

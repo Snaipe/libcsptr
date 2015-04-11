@@ -13,7 +13,15 @@ AC_CONFIG_MACRO_DIR([m4])
 AC_PROG_CC
 AM_PROG_CC_C_O
 
-AC_CHECK_LIB([check], [srunner_run_all], [], [AC_MSG_NOTICE([Could not find libcheck.])], [])
+enable_tests="no"
+AC_CHECK_LIB([check], [srunner_run_all],
+  [CHECKLIBS="-lcheck"
+   AC_SUBST([CHECKLIBS])
+   enable_tests="yes"
+  ],
+  [AC_MSG_NOTICE([Could not find libcheck.])], [])
+
+AM_CONDITIONAL([ENABLE_TESTS],[test "x$enable_tests" != "xno"])
 
 AC_PROG_LIBTOOL
 AC_PROG_INSTALL

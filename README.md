@@ -1,10 +1,10 @@
 C Smart Pointers
 ================
 
-[![Build Status](https://travis-ci.org/Snaipe/c-smart-pointers.svg?branch=master)](https://travis-ci.org/Snaipe/c-smart-pointers) 
-[![Coverage Status](https://coveralls.io/repos/Snaipe/c-smart-pointers/badge.svg?branch=master)](https://coveralls.io/r/Snaipe/c-smart-pointers?branch=master) 
-[![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](https://github.com/Snaipe/c-smart-pointers/blob/master/LICENSE) 
-[![Version](https://img.shields.io/github/tag/Snaipe/c-smart-pointers.svg?label=version&style=flat)](https://github.com/Snaipe/c-smart-pointers/releases)
+[![Build Status](https://travis-ci.org/Snaipe/libcsptr.svg?branch=master)](https://travis-ci.org/Snaipe/libcsptr) 
+[![Coverage Status](https://coveralls.io/repos/Snaipe/libcsptr/badge.svg?branch=master)](https://coveralls.io/r/Snaipe/libcsptr?branch=master) 
+[![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](https://github.com/Snaipe/libcsptr/blob/master/LICENSE) 
+[![Version](https://img.shields.io/github/tag/Snaipe/libcsptr.svg?label=version&style=flat)](https://github.com/Snaipe/libcsptr/releases)
 
 ## What this is
 
@@ -23,7 +23,7 @@ to the (GNU) C programming language.
 ### With a package manager
 
 * Mac OS X: `brew install snaipe/soft/libcsptr`
-* [AUR](https://aur.archlinux.org/packages/libcsptr-git/): `yaourt -S libcsptr-git`
+* [AUR](https://aur.archlinux.org/packages/libcsptr-git/): `yaourt -S libcsptr`
 
 ### Building from source
 #### Prerequisites

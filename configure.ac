@@ -1,6 +1,6 @@
 AC_PREREQ([2.60])
 
-AC_INIT([csptr], [2.0.0], [], [csptr], [franklinmathieu@gmail.com])
+AC_INIT([csptr], [2.0.1], [], [csptr], [franklinmathieu@gmail.com])
 AC_CONFIG_SRCDIR([src/mman.c])
 
 LT_PREREQ([2.2.4])

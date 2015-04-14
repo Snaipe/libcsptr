@@ -23,6 +23,7 @@ to the (GNU) C programming language.
 ### With a package manager
 
 * Mac OS X: `brew install snaipe/soft/libcsptr`
+* [AUR](https://aur.archlinux.org/packages/libcsptr-git/): `yaourt -S libcsptr-git`
 
 ### Building from source
 #### Prerequisites

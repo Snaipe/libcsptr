@@ -14,12 +14,12 @@ AC_PROG_CC
 AM_PROG_CC_C_O
 
 enable_tests="no"
-AC_CHECK_LIB([check], [srunner_run_all],
-  [CHECKLIBS="-lcheck"
+AC_CHECK_LIB([criterion], [criterion_run_all_tests],
+  [CHECKLIBS="-lcriterion"
    AC_SUBST([CHECKLIBS])
    enable_tests="yes"
   ],
-  [AC_MSG_NOTICE([Could not find libcheck.])], [])
+  [AC_MSG_NOTICE([Could not find libcriterion.])])
 
 AM_CONDITIONAL([ENABLE_TESTS],[test "x$enable_tests" != "xno"])
 

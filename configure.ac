@@ -7,7 +7,7 @@ LT_PREREQ([2.2.4])
 AC_CANONICAL_SYSTEM
 
 AM_INIT_AUTOMAKE([dist-bzip2 no-dist-gzip foreign subdir-objects parallel-tests color-tests])
-LT_INIT
+LT_INIT([shared static])
 AC_CONFIG_MACRO_DIR([m4])
 
 AC_PROG_CC
@@ -44,6 +44,17 @@ AC_ARG_ENABLE([gcov],
      AC_SUBST([COVERAGE_LDFLAGS])
     ],
     [])
+
+AC_MSG_CHECKING([if libtool needs -no-undefined flag to build shared libraries])
+case "`uname`" in
+  CYGWIN*|MINGW*|AIX*)
+    AC_MSG_RESULT([yes])
+    LDFLAGS="$LDFLAGS -no-undefined"
+    ;;
+  *)
+    AC_MSG_RESULT([no])
+    ;;
+esac
 
 AC_CONFIG_HEADERS([src/config.h])
 AC_CONFIG_FILES([Makefile check/Makefile])

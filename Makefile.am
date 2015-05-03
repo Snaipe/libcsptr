@@ -16,7 +16,7 @@ libcsptr_la_CFLAGS = \
 	-I$(top_srcdir)/include/csptr/ \
 	$(COVERAGE_CFLAGS)
 
-libcsptr_la_LDFLAGS = $(COVERAGE_LDFLAGS) -release $(VERSION)
+libcsptr_la_LDFLAGS = $(COVERAGE_LDFLAGS) -version-info 1:0:0
 
 EXTRA_DIST = LICENSE README.md
 

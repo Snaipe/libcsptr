@@ -53,11 +53,10 @@ inline void sfree_stack(void *ptr) {
             Args                                                            \
         };                                                                  \
         const __typeof__(Type[1]) dummy;                                    \
-        void *var =                                                         \
-            __builtin_choose_expr(sizeof (dummy[0]) == sizeof (dummy),      \
-                smalloc(sizeof (Type), 0, Kind, ARGS_),                     \
-                smalloc(sizeof (dummy[0]),                                  \
-                    sizeof (dummy) / sizeof (dummy[0]), Kind, ARGS_));      \
+        void *var = sizeof (dummy[0]) == sizeof (dummy)                     \
+            ? smalloc(sizeof (Type), 0, Kind, ARGS_)                        \
+            : smalloc(sizeof (dummy[0]),                                    \
+                    sizeof (dummy) / sizeof (dummy[0]), Kind, ARGS_);       \
         if (var != NULL)                                                    \
             memcpy(var, &args.value, sizeof (Type));                        \
         var;                                                                \

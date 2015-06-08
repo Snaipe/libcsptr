@@ -62,7 +62,30 @@ inline void sfree_stack(void *ptr) {
         var;                                                                \
     })
 
+# define smart_arr(Kind, Type, Length, Args...)                             \
+    ({                                                                      \
+        struct s_tmp {                                                      \
+            int sentinel_;                                                  \
+            __typeof__(__typeof__(Type)[Length]) value;                     \
+            f_destructor dtor;                                              \
+            struct {                                                        \
+                const void *ptr;                                            \
+                size_t size;                                                \
+            } meta;                                                         \
+        } args = {                                                          \
+            .sentinel_ = 0,                                                 \
+            Args                                                            \
+        };                                                                  \
+        void *var = smalloc(sizeof (Type), Length, Kind, ARGS_);            \
+        if (var != NULL)                                                    \
+            memcpy(var, &args.value, sizeof (Type));                        \
+        var;                                                                \
+    })
+
 # define shared_ptr(Type, Args...) smart_ptr(SHARED, Type, Args)
 # define unique_ptr(Type, Args...) smart_ptr(UNIQUE, Type, Args)
+
+# define shared_arr(Type, Length, Args...) smart_arr(SHARED, Type, Length, Args)
+# define unique_arr(Type, Length, Args...) smart_arr(UNIQUE, Type, Length, Args)
 
 #endif /* !CSPTR_SMART_PTR_H_ */

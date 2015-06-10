@@ -28,7 +28,6 @@
 #include <string.h>
 #include <assert.h>
 
-#include "config.h"
 #include "mman.h"
 #include "array.h"
 #undef smalloc

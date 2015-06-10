@@ -27,6 +27,22 @@
 
 # include <stdlib.h>
 
+# ifndef CSPTR_CONFIG_H_
+#  define CSPTR_CONFIG_H_
+#  include "config.h"
+# endif
+
+# ifdef CSPTR_NO_SENTINEL
+#  ifndef __GNUC__
+#   error Variadic structure sentinels can only be disabled on a compiler supporting GNU extensions
+#  endif
+#  define CSPTR_SENTINEL
+#  define CSPTR_SENTINEL_DEC
+# else
+#  define CSPTR_SENTINEL        .sentinel_ = 0,
+#  define CSPTR_SENTINEL_DEC int sentinel_;
+# endif
+
 enum pointer_kind {
     UNIQUE,
     SHARED,
@@ -44,7 +60,7 @@ typedef struct {
 extern s_allocator smalloc_allocator;
 
 typedef struct {
-    int sentinel_;
+    CSPTR_SENTINEL_DEC
     size_t size;
     size_t nmemb;
     enum pointer_kind kind;
@@ -62,7 +78,7 @@ __attribute__((malloc))
 void *smalloc(s_smalloc_args *args);
 void sfree(void *ptr);
 
-# define smalloc(...) \
-    smalloc(&(s_smalloc_args) { .sentinel_ = 0, __VA_ARGS__ })
+#  define smalloc(...) \
+    smalloc(&(s_smalloc_args) { CSPTR_SENTINEL __VA_ARGS__ })
 
 #endif /* !CSPTR_SMALLOC_H_ */

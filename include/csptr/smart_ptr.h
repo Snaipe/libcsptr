@@ -41,7 +41,7 @@ inline void sfree_stack(void *ptr) {
 # define smart_ptr(Kind, Type, Args...)                                     \
     ({                                                                      \
         struct s_tmp {                                                      \
-            int sentinel_;                                                  \
+            CSPTR_SENTINEL_DEC                                              \
             __typeof__(Type) value;                                         \
             f_destructor dtor;                                              \
             struct {                                                        \
@@ -49,7 +49,7 @@ inline void sfree_stack(void *ptr) {
                 size_t size;                                                \
             } meta;                                                         \
         } args = {                                                          \
-            .sentinel_ = 0,                                                 \
+            CSPTR_SENTINEL                                                  \
             Args                                                            \
         };                                                                  \
         const __typeof__(Type[1]) dummy;                                    \
@@ -65,7 +65,7 @@ inline void sfree_stack(void *ptr) {
 # define smart_arr(Kind, Type, Length, Args...)                             \
     ({                                                                      \
         struct s_tmp {                                                      \
-            int sentinel_;                                                  \
+            CSPTR_SENTINEL_DEC                                              \
             __typeof__(__typeof__(Type)[Length]) value;                     \
             f_destructor dtor;                                              \
             struct {                                                        \
@@ -73,7 +73,7 @@ inline void sfree_stack(void *ptr) {
                 size_t size;                                                \
             } meta;                                                         \
         } args = {                                                          \
-            .sentinel_ = 0,                                                 \
+            CSPTR_SENTINEL                                                  \
             Args                                                            \
         };                                                                  \
         void *var = smalloc(sizeof (Type), Length, Kind, ARGS_);            \

@@ -16,6 +16,6 @@
 !configure.ac
 !autogen.sh
 
-src/config.h
+include/csptr/config.h
 *~
 *.swp

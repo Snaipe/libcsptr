@@ -39,7 +39,7 @@ AC_ARG_WITH([sentinel],
     AS_HELP_STRING([--without-sentinel], [Disable the sentinel used for variadic function arguments]))
 
 AS_IF([test "x$with_sentinel" = "xno"], [
-  AC_DEFINE([CSPTR_NO_SENTINEL], [1], [Define if a sentinel should not be used for variadic function arguments.])
+  AC_DEFINE([NO_SENTINEL], [1], [Define if a sentinel should not be used for variadic function arguments.])
 ])
 
 AC_ARG_ENABLE([gcov],
@@ -63,7 +63,8 @@ case "`uname`" in
     ;;
 esac
 
-AC_CONFIG_HEADERS([include/csptr/config.h])
+AM_CONFIG_HEADER([src/config.h])
+AX_PREFIX_CONFIG_H([include/csptr/config.h])
 AC_CONFIG_FILES([Makefile check/Makefile])
 
 AC_OUTPUT

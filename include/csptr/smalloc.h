@@ -26,11 +26,7 @@
 # define CSPTR_SMALLOC_H_
 
 # include <stdlib.h>
-
-# ifndef CSPTR_CONFIG_H_
-#  define CSPTR_CONFIG_H_
-#  include "config.h"
-# endif
+# include "config.h"
 
 # ifdef CSPTR_NO_SENTINEL
 #  ifndef __GNUC__

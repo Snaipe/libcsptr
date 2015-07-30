@@ -1,16 +1,17 @@
 language: c
 compiler:
   - gcc
+sudo: false
+addons:
+  apt:
+    packages:
+    - check
 before_install:
-  - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
-  - sudo apt-get -qq update
-  - sudo apt-get -qq install -y check gcc-4.9
-  - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 90
-  - sudo pip install cpp-coveralls
+    - pip install --user cpp-coveralls
 script:
   - autoreconf -i && ./configure ${FEATURES} --enable-gcov CFLAGS="-g -O0" && make && make check
 after_success:
-  - coveralls --gcov gcov-4.9 --exclude check --gcov-options '\-lp' -b .
+  - coveralls --exclude check --gcov-options '\-lp' -b .
 after_failure:
   - cat $(find check -iname '*.log') /dev/null
 

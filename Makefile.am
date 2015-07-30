@@ -11,7 +11,7 @@ WARNINGS = -Wall -Wextra \
 
 libcsptr_la_CFLAGS = \
 	$(WARNINGS) \
-	-std=gnu11 \
+	-std=gnu99 \
 	-fplan9-extensions \
 	-I$(top_srcdir)/include/csptr/ \
 	$(COVERAGE_CFLAGS)

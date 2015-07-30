@@ -1,0 +1,10 @@
+#ifndef CSPTR_CONFIG_H_IN_
+# define CSPTR_CONFIG_H_IN_
+
+#cmakedefine SMALLOC_FIXED_ALLOCATOR 1
+#cmakedefine CSPTR_NO_SENTINEL 1
+
+# define CSPTR_PACKAGE "${PROJECT_NAME}"
+# define CSPTR_VERSION "${PROJECT_VERSION}"
+
+#endif /* !CSPTR_CONFIG_H_IN_ */

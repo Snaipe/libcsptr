@@ -1,5 +1,5 @@
 #include <check.h>
-#include <csptr/array.h>
+#include "csptr/array.h"
 #include "utils.h"
 
 #define ARRAY_SIZE 25
@@ -21,7 +21,7 @@ START_TEST (test_array) {
 START_TEST (test_array_dtor_run) {
     int dtor_run = 0;
     int *arr;
-    f_destructor dtor = lambda(void, (void *ptr, void *meta) {
+    f_destructor dtor = lambda(void, (void *ptr, UNUSED void *meta) {
             ck_assert(ptr == arr + dtor_run);
             dtor_run++;
         });
@@ -36,16 +36,16 @@ START_TEST (test_array_dtor_run) {
 START_TEST (test_array_meta) {
     smart int *arr = unique_ptr(int[ARRAY_SIZE], {}, .meta = { &m, sizeof (m) });
     assert_valid_array(arr, ARRAY_SIZE, sizeof (int));
-    assert_valid_meta(arr, &m, array_user_meta(arr));
+    assert_valid_meta(&m, array_user_meta(arr));
 } END_TEST
 
 START_TEST (test_array_dtor_run_with_meta) {
     int dtor_run = 0;
-    f_destructor dtor = lambda(void, (void *ptr, void *meta) { dtor_run = 1; });
+    f_destructor dtor = lambda(void, (UNUSED void *ptr, UNUSED void *meta) { dtor_run = 1; });
 
     int *arr = unique_ptr(int[ARRAY_SIZE], {}, dtor, { &m, sizeof (m) });
     assert_valid_array(arr, ARRAY_SIZE, sizeof (int));
-    assert_valid_meta(arr, &m, array_user_meta(arr));
+    assert_valid_meta(&m, array_user_meta(arr));
 
     sfree(arr);
     ck_assert_msg(dtor_run, "Expected destructor to run");

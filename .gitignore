@@ -5,6 +5,7 @@
 
 !*.c
 !*.h
+!*.h.in
 
 !LICENSE
 !HEADER
@@ -12,10 +13,9 @@
 !ChangeLog
 !doc/*
 
-!Makefile.am
-!configure.ac
-!autogen.sh
+!CMakeLists.txt
 
+build/*
 include/csptr/config.h
 *~
 *.swp

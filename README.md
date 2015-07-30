@@ -28,15 +28,14 @@ to the (GNU) C programming language.
 ### Building from source
 #### Prerequisites
 
-To compile the library, GCC 4.9+ is needed.
+To compile the library, GCC 4.6+ is needed.
 
 #### Installation
 
 1. Clone this repository
-2. run `./autogen.sh && ./configure --prefix=$HOME/ && make && make install`
+2. run `mkdir build && cd $_ && cmake -DCMAKE_INSTALL_PREFIX=$HOME .. && make && make install`
    from the project root for a local install, or run
-   `./autogen.sh && ./configure && make && sudo make install` for a global
-   install.
+   `mkdir build && cd $_ && cmake -DCMAKE_INSTALL_PREFIX=$HOME .. && make && sudo make install` for a global install.
 
 ## Examples
 

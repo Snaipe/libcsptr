@@ -1,6 +1,6 @@
 #include <check.h>
-#include <csptr/smart_ptr.h>
-#include "config.h"
+#include "csptr/smart_ptr.h"
+#include "csptr/config.h"
 #include "utils.h"
 
 START_TEST (test_zero_size) {
@@ -11,8 +11,8 @@ START_TEST (test_zero_size) {
 #ifndef SMALLOC_FIXED_ALLOCATOR
 START_TEST (test_alloc_failure) {
     smalloc_allocator = (s_allocator) {
-        lambda(void *, (size_t s) { return NULL; }),
-        lambda(void, (void *ptr) {})
+        lambda(void *, (UNUSED size_t s) { return NULL; }),
+        lambda(void, (UNUSED void *ptr) {})
     };
     smart void *ptr = unique_ptr(int, 42);
     ck_assert_msg(ptr == NULL, "Expected NULL pointer to be returned.");

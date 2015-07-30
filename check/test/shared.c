@@ -1,6 +1,6 @@
 
 #include <check.h>
-#include <csptr/smart_ptr.h>
+#include "csptr/smart_ptr.h"
 #include "utils.h"
 
 START_TEST (test_shared_init) {
@@ -10,7 +10,7 @@ START_TEST (test_shared_init) {
 
 START_TEST (test_shared_sref) {
     int dtor_run = 0;
-    f_destructor dtor = lambda(void, (void *ptr, void *meta) { dtor_run = 1; });
+    f_destructor dtor = lambda(void, (UNUSED void *ptr, UNUSED void *meta) { dtor_run = 1; });
     smart void *ptr = shared_ptr(int, 42, dtor);
     assert_valid_ptr(ptr);
 

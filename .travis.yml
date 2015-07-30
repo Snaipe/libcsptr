@@ -7,15 +7,18 @@ addons:
     packages:
     - check
 before_install:
-    - pip install --user cpp-coveralls
+  - pip install --user cpp-coveralls
+  - export CFLAGS="-g -O0"
 script:
-  - autoreconf -i && ./configure ${FEATURES} --enable-gcov CFLAGS="-g -O0" && make && make check
+  - mkdir -p build && cd $_ && cmake ${FEATURES} -DCOVERALLS=ON -DCMAKE_BUILD_TYPE=Debug .. && make && make test
 after_success:
-  - coveralls --exclude check --gcov-options '\-lp' -b .
+  - make coveralls
 after_failure:
   - cat $(find check -iname '*.log') /dev/null
 
 env:
   matrix:
     - FEATURES=""
-    - FEATURES="--with-fixed-allocator"
+    - FEATURES="-DFIXED_ALLOCATOR=ON"
+    - FEATURES="-DSENTINEL=OFF"
+    - FEATURES="-DSENTINEL=OFF -DFIXED_ALLOCATOR=ON"

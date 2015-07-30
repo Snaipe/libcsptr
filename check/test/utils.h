@@ -36,7 +36,7 @@ struct meta {
 extern const struct meta m;
 
 __attribute__((always_inline))
-inline void assert_valid_meta(void *ptr, const struct meta *m, const struct meta *m2) {
+inline void assert_valid_meta(const struct meta *m, const struct meta *m2) {
     ck_assert_msg(m2 != NULL, "Expected metadata to be present");
     ck_assert_msg(m != m2, "Expected metadata to be copied");
     const int intact = m->i == m2->i
@@ -46,5 +46,6 @@ inline void assert_valid_meta(void *ptr, const struct meta *m, const struct meta
 }
 
 #define lambda(RType, Body) ({ RType __fn__ Body; __fn__; })
+#define UNUSED __attribute__ ((unused))
 
 #endif /* !UTILS_H_ */

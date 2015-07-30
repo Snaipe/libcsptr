@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <check.h>
-#include <csptr/smart_ptr.h>
+#include "csptr/smart_ptr.h"
 
 #include "test.h"
 #include "utils.h"

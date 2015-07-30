@@ -1,24 +1,26 @@
 language: c
 compiler:
-  - gcc
+- gcc
 sudo: false
 addons:
   apt:
     packages:
     - check
 before_install:
-  - pip install --user cpp-coveralls
-  - export CFLAGS="-g -O0"
+- pip install --user cpp-coveralls
+- export CFLAGS="-g -O0"
 script:
-  - mkdir -p build && cd $_ && cmake ${FEATURES} -DCOVERALLS=ON -DCMAKE_BUILD_TYPE=Debug .. && make && make test
+- mkdir -p build && cd $_ && cmake ${FEATURES} -DCOVERALLS=ON -DCMAKE_BUILD_TYPE=Debug
+  .. && make && make test
 after_success:
-  - make coveralls
+- make coveralls
 after_failure:
-  - cat $(find check -iname '*.log') /dev/null
-
+- cat $(find check -iname '*.log') /dev/null
 env:
   matrix:
-    - FEATURES=""
-    - FEATURES="-DFIXED_ALLOCATOR=ON"
-    - FEATURES="-DSENTINEL=OFF"
-    - FEATURES="-DSENTINEL=OFF -DFIXED_ALLOCATOR=ON"
+  - FEATURES=""
+  - FEATURES="-DFIXED_ALLOCATOR=ON"
+  - FEATURES="-DSENTINEL=OFF"
+  - FEATURES="-DSENTINEL=OFF -DFIXED_ALLOCATOR=ON"
+  global:
+    secure: CQ+DjIdSOn5kQALHcTJ1whkZDLVmTDbPLV3g8Es0Gz4/goFfgGWMyF4VuKD+UD+O0Z7eV/epZMQfatbG7jIMXQTai7ylXu0hyHA0rE7ypalWBRyRZC9raTChrlonLv9QqucNrcFepIDcAaSsX2bJYH0KBsqasdgGJmjPlo/1CLs=

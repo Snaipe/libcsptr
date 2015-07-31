@@ -54,7 +54,6 @@ set(INTERFACE_FILES
   include/csptr/smalloc.h
   include/csptr/array.h
   include/csptr/smart_ptr.h
-  include/csptr/config.h
 )
 
 include_directories(include/csptr src)

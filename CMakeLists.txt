@@ -56,6 +56,8 @@ set(INTERFACE_FILES
   include/csptr/smart_ptr.h
 )
 
+set(MAN_FILES doc/csptr.3)
+
 include_directories(include/csptr src)
 add_library(csptr SHARED ${SOURCE_FILES} ${INTERFACE_FILES})
 
@@ -64,6 +66,7 @@ if (COVERALLS)
 endif()
 
 install(FILES ${INTERFACE_FILES} DESTINATION include/csptr)
+install(FILES ${MAN_FILES} DESTINATION share/man/man3)
 install(TARGETS csptr
   RUNTIME DESTINATION bin
   LIBRARY DESTINATION lib

@@ -65,6 +65,7 @@ endif()
 
 install(FILES ${INTERFACE_FILES} DESTINATION include/csptr)
 install(TARGETS csptr
+  RUNTIME DESTINATION bin
   LIBRARY DESTINATION lib
   ARCHIVE DESTINATION lib
 )

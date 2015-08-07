@@ -38,7 +38,11 @@ typedef struct {
 } s_meta;
 
 typedef struct {
-    s_meta;
+    enum pointer_kind kind;
+    f_destructor dtor;
+#ifndef NDEBUG
+    void *ptr;
+#endif /* !NDEBUG */
     size_t ref_count;
 } s_meta_shared;
 

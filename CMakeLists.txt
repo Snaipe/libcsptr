@@ -10,7 +10,7 @@ set(PROJECT_VERSION "2.0.4")
 set(MODULE_DIR "${CMAKE_SOURCE_DIR}/.cmake/Modules")
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${MODULE_DIR})
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -Werror -g -std=gnu99 -Wno-unused-result -Wno-missing-field-initializers -fplan9-extensions")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -Werror -g -std=gnu99 -Wno-unused-result -Wno-missing-field-initializers")
 
 if (WIN32)
   set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-no-undefined")
@@ -28,8 +28,10 @@ endif()
 
 # Find dependencies
 
+option(TESTS "Turn on tests" ON)
+
 find_package(Check)
-if (CHECK_FOUND)
+if (CHECK_FOUND AND TESTS)
   add_subdirectory(check)
 endif()
 

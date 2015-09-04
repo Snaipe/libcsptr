@@ -21,7 +21,7 @@ endif()
 option(COVERALLS "Turn on coveralls support" OFF)
 option(COVERALLS_UPLOAD "Upload the generated coveralls json" ON)
 
-if (COVERALLS)
+if (COVERALLS AND NOT LIBCSPTR_DISABLE_COVERALLS)
   include(Coveralls)
   coveralls_turn_on_coverage()
 endif()
@@ -70,7 +70,7 @@ endif ()
 include_directories(include/csptr src)
 add_library(csptr STATIC ${SOURCE_FILES} ${INTERFACE_FILES})
 
-if (COVERALLS)
+if (COVERALLS AND NOT LIBCSPTR_DISABLE_COVERALLS)
   coveralls_setup("${SOURCE_FILES}" ${COVERALLS_UPLOAD})
 endif()
 

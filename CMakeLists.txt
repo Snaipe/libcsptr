@@ -7,7 +7,7 @@ project(csptr C)
 enable_testing()
 
 set(PROJECT_VERSION "2.0.4")
-set(MODULE_DIR "${CMAKE_SOURCE_DIR}/.cmake/Modules")
+set(MODULE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/.cmake/Modules")
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${MODULE_DIR})
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -Werror -g -std=gnu99 -Wno-unused-result -Wno-missing-field-initializers")
@@ -31,7 +31,7 @@ endif()
 option(TESTS "Turn on tests" ON)
 
 find_package(Check)
-if (CHECK_FOUND AND TESTS)
+if (CHECK_FOUND AND TESTS AND NOT LIBCSPTR_DISABLE_TESTS)
   add_subdirectory(check)
 endif()
 
@@ -43,8 +43,8 @@ option(FIXED_ALLOCATOR "Define if malloc should always be used" OFF)
 # Generate the configure file
 
 configure_file(
-  "${CMAKE_SOURCE_DIR}/src/config.h.in"
-  "${CMAKE_SOURCE_DIR}/include/csptr/config.h"
+  "${CMAKE_CURRENT_SOURCE_DIR}/src/config.h.in"
+  "${CMAKE_CURRENT_SOURCE_DIR}/include/csptr/config.h"
 )
 
 # List sources and headers
@@ -63,8 +63,10 @@ set(INTERFACE_FILES
 
 set(MAN_FILES doc/csptr.3)
 
+add_definitions("-fPIC")
+
 include_directories(include/csptr src)
-add_library(csptr SHARED ${SOURCE_FILES} ${INTERFACE_FILES})
+add_library(csptr STATIC ${SOURCE_FILES} ${INTERFACE_FILES})
 
 if (COVERALLS)
   coveralls_setup("${SOURCE_FILES}" ${COVERALLS_UPLOAD})

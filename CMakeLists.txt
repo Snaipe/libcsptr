@@ -63,7 +63,9 @@ set(INTERFACE_FILES
 
 set(MAN_FILES doc/csptr.3)
 
-add_definitions("-fPIC")
+if (NOT WIN32)
+  add_definitions("-fPIC")
+endif ()
 
 include_directories(include/csptr src)
 add_library(csptr STATIC ${SOURCE_FILES} ${INTERFACE_FILES})

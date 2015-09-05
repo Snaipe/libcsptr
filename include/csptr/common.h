@@ -21,31 +21,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+#ifndef CSPTR_COMMON_H_
+# define CSPTR_COMMON_H_
 
-#ifndef CSPTR_ARRAY_H_
-# define CSPTR_ARRAY_H_
+# ifdef __GNUC__
+#  define CSPTR_INLINE      __attribute__ ((always_inline)) inline
+#  define CSPTR_MALLOC_API  __attribute__ ((malloc))
+#  define CSPTR_PURE        __attribute__ ((pure))
+# elif defined(_MSVC_VER)
+#  define CSPTR_INLINE      __forceinline
+#  define CSPTR_MALLOC_API
+#  define CSPTR_PURE
+# else
+#  define CSPTR_INLINE
+#  define CSPTR_MALLOC_API
+#  define CSPTR_PURE
+# endif
 
-# include "common.h"
-# include "smart_ptr.h"
-
-typedef struct {
-    size_t nmemb;
-    size_t size;
-} s_meta_array;
-
-CSPTR_PURE CSPTR_INLINE size_t array_length(void *ptr) {
-    s_meta_array *meta = get_smart_ptr_meta(ptr);
-    return meta ? meta->nmemb : 0;
-}
-
-CSPTR_PURE CSPTR_INLINE size_t array_type_size(void *ptr) {
-    s_meta_array *meta = get_smart_ptr_meta(ptr);
-    return meta ? meta->size : 0;
-}
-
-CSPTR_PURE CSPTR_INLINE void *array_user_meta(void *ptr) {
-    s_meta_array *meta = get_smart_ptr_meta(ptr);
-    return meta ? meta + 1 : NULL;
-}
-
-#endif /* !CSPTR_ARRAY_H_ */
+#endif /* !CSPTR_COMMON_H_ */

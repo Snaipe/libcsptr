@@ -27,13 +27,9 @@
 
 # include "smalloc.h"
 
-# ifdef __GNUC__
-# define INLINE __attribute__ ((always_inline)) inline
-# define MALLOC_API __attribute__ ((malloc))
-# else
-# define INLINE
-# define MALLOC_API
-# endif
+# define INLINE CSPTR_INLINE
+# define PURE CSPTR_PURE
+# define MALLOC_API CSPTR_MALLOC_API
 
 typedef struct {
     enum pointer_kind kind;
@@ -56,8 +52,7 @@ INLINE size_t align(size_t s) {
     return (s + (sizeof (void *) - 1)) & ~(sizeof (void *) - 1);
 }
 
-__attribute__ ((pure))
-INLINE s_meta *get_meta(void *ptr) {
+PURE INLINE s_meta *get_meta(void *ptr) {
     size_t *size = (size_t *) ptr - 1;
     return (s_meta *) ((char *) size - *size);
 }

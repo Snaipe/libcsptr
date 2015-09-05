@@ -27,6 +27,7 @@
 
 # include <stdlib.h>
 # include "config.h"
+# include "common.h"
 
 # ifdef CSPTR_NO_SENTINEL
 #  ifndef __GNUC__
@@ -67,11 +68,9 @@ typedef struct {
     } meta;
 } s_smalloc_args;
 
-__attribute__ ((pure))
-void *get_smart_ptr_meta(void *ptr);
+CSPTR_PURE void *get_smart_ptr_meta(void *ptr);
 void *sref(void *ptr);
-__attribute__((malloc))
-void *smalloc(s_smalloc_args *args);
+CSPTR_MALLOC_API void *smalloc(s_smalloc_args *args);
 void sfree(void *ptr);
 
 #  define smalloc(...) \

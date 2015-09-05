@@ -26,10 +26,10 @@
 # define CSPTR_SMART_PTR_H_
 
 # include <string.h>
+# include "common.h"
 # include "smalloc.h"
 
-__attribute__ ((always_inline))
-inline void sfree_stack(void *ptr) {
+CSPTR_INLINE void sfree_stack(void *ptr) {
     void **real_ptr = ptr;
     sfree(*real_ptr);
     *real_ptr = NULL;

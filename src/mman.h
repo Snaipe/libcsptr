@@ -27,7 +27,13 @@
 
 # include "smalloc.h"
 
+# ifdef __GNUC__
 # define INLINE __attribute__ ((always_inline)) inline
+# define MALLOC_API __attribute__ ((malloc))
+# else
+# define INLINE
+# define MALLOC_API
+# endif
 
 typedef struct {
     enum pointer_kind kind;

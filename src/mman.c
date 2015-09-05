@@ -34,8 +34,7 @@
 
 s_allocator smalloc_allocator = {malloc, free};
 
-__attribute__ ((always_inline))
-static inline size_t atomic_add(size_t *count, const size_t limit, const size_t val) {
+static INLINE size_t atomic_add(size_t *count, const size_t limit, const size_t val) {
     size_t old_count, new_count;
     do {
       old_count = *count;
@@ -46,18 +45,15 @@ static inline size_t atomic_add(size_t *count, const size_t limit, const size_t 
     return new_count;
 }
 
-__attribute__ ((always_inline))
-static inline size_t atomic_increment(size_t *count) {
+static INLINE size_t atomic_increment(size_t *count) {
     return atomic_add(count, SIZE_MAX, 1);
 }
 
-__attribute__ ((always_inline))
-static inline size_t atomic_decrement(size_t *count) {
+static INLINE size_t atomic_decrement(size_t *count) {
     return atomic_add(count, 0, -1);
 }
 
-__attribute__ ((pure))
-void *get_smart_ptr_meta(void *ptr) {
+INLINE void *get_smart_ptr_meta(void *ptr) {
     assert((size_t) ptr == align((size_t) ptr));
 
     s_meta *meta = get_meta(ptr);
@@ -79,14 +75,14 @@ void *sref(void *ptr) {
     return ptr;
 }
 
-__attribute__ ((malloc))
+MALLOC_API
 INLINE static void *alloc_entry(size_t head, size_t size, size_t metasize) {
     const size_t totalsize = head + size + metasize + sizeof (size_t);
-#ifdef SMALLOC_FIXED_ALLOCATOR
+#ifdef SMALLOC_API_FIXED_ALLOCATOR
     return malloc(totalsize);
-#else /* !SMALLOC_FIXED_ALLOCATOR */
+#else /* !SMALLOC_API_FIXED_ALLOCATOR */
     return smalloc_allocator.alloc(totalsize);
-#endif /* !SMALLOC_FIXED_ALLOCATOR */
+#endif /* !SMALLOC_API_FIXED_ALLOCATOR */
 }
 
 INLINE static void dealloc_entry(s_meta *meta, void *ptr) {
@@ -100,14 +96,14 @@ INLINE static void dealloc_entry(s_meta *meta, void *ptr) {
             meta->dtor(ptr, user_meta);
     }
 
-#ifdef SMALLOC_FIXED_ALLOCATOR
+#ifdef SMALLOC_API_FIXED_ALLOCATOR
     free(meta);
-#else /* !SMALLOC_FIXED_ALLOCATOR */
+#else /* !SMALLOC_API_FIXED_ALLOCATOR */
     smalloc_allocator.dealloc(meta);
-#endif /* !SMALLOC_FIXED_ALLOCATOR */
+#endif /* !SMALLOC_API_FIXED_ALLOCATOR */
 }
 
-__attribute__ ((malloc))
+MALLOC_API
 static void *smalloc_impl(s_smalloc_args *args) {
     if (!args->size)
         return NULL;
@@ -142,7 +138,7 @@ static void *smalloc_impl(s_smalloc_args *args) {
     return sz + 1;
 }
 
-__attribute__ ((malloc))
+MALLOC_API
 INLINE static void *smalloc_array(s_smalloc_args *args) {
     char new_meta[align(args->meta.size + sizeof(s_meta_array))];
     s_meta_array *arr_meta = (void *) new_meta;
@@ -159,7 +155,7 @@ INLINE static void *smalloc_array(s_smalloc_args *args) {
         });
 }
 
-__attribute__ ((malloc))
+MALLOC_API
 void *smalloc(s_smalloc_args *args) {
     return (args->nmemb == 0 ? smalloc_impl : smalloc_array)(args);
 }

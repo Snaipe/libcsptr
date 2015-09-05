@@ -49,7 +49,7 @@ typedef struct {
 } s_meta_shared;
 
 INLINE size_t align(size_t s) {
-    return (s + (sizeof (void *) - 1)) & ~(sizeof (void *) - 1);
+    return (s + (sizeof (char *) - 1)) & ~(sizeof (char *) - 1);
 }
 
 PURE INLINE s_meta *get_meta(void *ptr) {

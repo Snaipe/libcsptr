@@ -38,7 +38,7 @@ CSPTR_INLINE void sfree_stack(void *ptr) {
 # define ARGS_ args.dtor, { args.meta.ptr, args.meta.size }
 
 # define smart __attribute__ ((cleanup(sfree_stack)))
-# define smart_ptr(Kind, Type, Args...)                                     \
+# define smart_ptr(Kind, Type, ...)                                         \
     ({                                                                      \
         struct s_tmp {                                                      \
             CSPTR_SENTINEL_DEC                                              \
@@ -50,7 +50,7 @@ CSPTR_INLINE void sfree_stack(void *ptr) {
             } meta;                                                         \
         } args = {                                                          \
             CSPTR_SENTINEL                                                  \
-            Args                                                            \
+            __VA_ARGS__                                                     \
         };                                                                  \
         const __typeof__(Type[1]) dummy;                                    \
         void *var = sizeof (dummy[0]) == sizeof (dummy)                     \
@@ -62,7 +62,7 @@ CSPTR_INLINE void sfree_stack(void *ptr) {
         var;                                                                \
     })
 
-# define smart_arr(Kind, Type, Length, Args...)                             \
+# define smart_arr(Kind, Type, Length, ...)                                 \
     ({                                                                      \
         struct s_tmp {                                                      \
             CSPTR_SENTINEL_DEC                                              \
@@ -74,7 +74,7 @@ CSPTR_INLINE void sfree_stack(void *ptr) {
             } meta;                                                         \
         } args = {                                                          \
             CSPTR_SENTINEL                                                  \
-            Args                                                            \
+            __VA_ARGS__                                                     \
         };                                                                  \
         void *var = smalloc(sizeof (Type), Length, Kind, ARGS_);            \
         if (var != NULL)                                                    \
@@ -82,10 +82,10 @@ CSPTR_INLINE void sfree_stack(void *ptr) {
         var;                                                                \
     })
 
-# define shared_ptr(Type, Args...) smart_ptr(SHARED, Type, Args)
-# define unique_ptr(Type, Args...) smart_ptr(UNIQUE, Type, Args)
+# define shared_ptr(Type, ...) smart_ptr(SHARED, Type, __VA_ARGS__)
+# define unique_ptr(Type, ...) smart_ptr(UNIQUE, Type, __VA_ARGS__)
 
-# define shared_arr(Type, Length, Args...) smart_arr(SHARED, Type, Length, Args)
-# define unique_arr(Type, Length, Args...) smart_arr(UNIQUE, Type, Length, Args)
+# define shared_arr(Type, Length, ...) smart_arr(SHARED, Type, Length, __VA_ARGS__)
+# define unique_arr(Type, Length, ...) smart_arr(UNIQUE, Type, Length, __VA_ARGS__)
 
 #endif /* !CSPTR_SMART_PTR_H_ */

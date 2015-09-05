@@ -35,7 +35,8 @@
 s_allocator smalloc_allocator = {malloc, free};
 
 #ifdef (_MSC_VER)
-# define <windows.h>
+# include <windows.h>
+# include <malloc.h>
 #endif
 
 #ifndef (_MSC_VER)
@@ -154,7 +155,12 @@ static void *smalloc_impl(s_smalloc_args *args) {
 
 MALLOC_API
 INLINE static void *smalloc_array(s_smalloc_args *args) {
-    char new_meta[align(args->meta.size + sizeof(s_meta_array))];
+    const size_t size = align(args->meta.size + sizeof(s_meta_array));
+#ifdef _MSC_VER
+    char *new_meta = _alloca(size);
+#else
+    char new_meta[size];
+#endif
     s_meta_array *arr_meta = (void *) new_meta;
     *arr_meta = (s_meta_array) {
         .size = args->size,
@@ -165,7 +171,7 @@ INLINE static void *smalloc_array(s_smalloc_args *args) {
             .size = args->nmemb * args->size,
             .kind = args->kind | ARRAY,
             .dtor = args->dtor,
-            .meta = { &new_meta, sizeof (new_meta) },
+            .meta = { &new_meta, size },
         });
 }
 

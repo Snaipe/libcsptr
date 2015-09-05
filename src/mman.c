@@ -34,12 +34,12 @@
 
 s_allocator smalloc_allocator = {malloc, free};
 
-#ifdef (_MSC_VER)
+#ifdef _MSC_VER
 # include <windows.h>
 # include <malloc.h>
 #endif
 
-#ifndef (_MSC_VER)
+#ifndef _MSC_VER
 static INLINE size_t atomic_add(size_t *count, const size_t limit, const size_t val) {
     size_t old_count, new_count;
     do {
@@ -53,7 +53,7 @@ static INLINE size_t atomic_add(size_t *count, const size_t limit, const size_t 
 #endif
 
 static INLINE size_t atomic_increment(size_t *count) {
-#ifdef (_MSC_VER)
+#ifdef _MSC_VER
     return InterlockedIncrement64(count);
 #else
     return atomic_add(count, SIZE_MAX, 1);
@@ -61,7 +61,7 @@ static INLINE size_t atomic_increment(size_t *count) {
 }
 
 static INLINE size_t atomic_decrement(size_t *count) {
-#ifdef (_MSC_VER)
+#ifdef _MSC_VER
     return InterlockedDecrement64(count);
 #else
     return atomic_add(count, 0, -1);

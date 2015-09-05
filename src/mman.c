@@ -40,7 +40,7 @@ s_allocator smalloc_allocator = {malloc, free};
 #endif
 
 #ifndef _MSC_VER
-static INLINE size_t atomic_add(size_t *count, const size_t limit, const size_t val) {
+static CSPTR_INLINE size_t atomic_add(size_t *count, const size_t limit, const size_t val) {
     size_t old_count, new_count;
     do {
       old_count = *count;
@@ -52,7 +52,7 @@ static INLINE size_t atomic_add(size_t *count, const size_t limit, const size_t 
 }
 #endif
 
-static INLINE size_t atomic_increment(size_t *count) {
+static CSPTR_INLINE size_t atomic_increment(size_t *count) {
 #ifdef _MSC_VER
     return InterlockedIncrement64(count);
 #else
@@ -60,7 +60,7 @@ static INLINE size_t atomic_increment(size_t *count) {
 #endif
 }
 
-static INLINE size_t atomic_decrement(size_t *count) {
+static CSPTR_INLINE size_t atomic_decrement(size_t *count) {
 #ifdef _MSC_VER
     return InterlockedDecrement64(count);
 #else
@@ -68,7 +68,7 @@ static INLINE size_t atomic_decrement(size_t *count) {
 #endif
 }
 
-INLINE void *get_smart_ptr_meta(void *ptr) {
+CSPTR_INLINE void *get_smart_ptr_meta(void *ptr) {
     assert((size_t) ptr == align((size_t) ptr));
 
     s_meta *meta = get_meta(ptr);
@@ -90,17 +90,17 @@ void *sref(void *ptr) {
     return ptr;
 }
 
-MALLOC_API
-INLINE static void *alloc_entry(size_t head, size_t size, size_t metasize) {
+CSPTR_MALLOC_API
+CSPTR_INLINE static void *alloc_entry(size_t head, size_t size, size_t metasize) {
     const size_t totalsize = head + size + metasize + sizeof (size_t);
-#ifdef SMALLOC_API_FIXED_ALLOCATOR
+#ifdef SMALLOC_FIXED_ALLOCATOR
     return malloc(totalsize);
-#else /* !SMALLOC_API_FIXED_ALLOCATOR */
+#else /* !SMALLOC_FIXED_ALLOCATOR */
     return smalloc_allocator.alloc(totalsize);
-#endif /* !SMALLOC_API_FIXED_ALLOCATOR */
+#endif /* !SMALLOC_FIXED_ALLOCATOR */
 }
 
-INLINE static void dealloc_entry(s_meta *meta, void *ptr) {
+CSPTR_INLINE static void dealloc_entry(s_meta *meta, void *ptr) {
     if (meta->dtor) {
         void *user_meta = get_smart_ptr_meta(ptr);
         if (meta->kind & ARRAY) {
@@ -111,14 +111,14 @@ INLINE static void dealloc_entry(s_meta *meta, void *ptr) {
             meta->dtor(ptr, user_meta);
     }
 
-#ifdef SMALLOC_API_FIXED_ALLOCATOR
+#ifdef SMALLOC_FIXED_ALLOCATOR
     free(meta);
-#else /* !SMALLOC_API_FIXED_ALLOCATOR */
+#else /* !SMALLOC_FIXED_ALLOCATOR */
     smalloc_allocator.dealloc(meta);
-#endif /* !SMALLOC_API_FIXED_ALLOCATOR */
+#endif /* !SMALLOC_FIXED_ALLOCATOR */
 }
 
-MALLOC_API
+CSPTR_MALLOC_API
 static void *smalloc_impl(s_smalloc_args *args) {
     if (!args->size)
         return NULL;
@@ -153,8 +153,8 @@ static void *smalloc_impl(s_smalloc_args *args) {
     return sz + 1;
 }
 
-MALLOC_API
-INLINE static void *smalloc_array(s_smalloc_args *args) {
+CSPTR_MALLOC_API
+CSPTR_INLINE static void *smalloc_array(s_smalloc_args *args) {
     const size_t size = align(args->meta.size + sizeof(s_meta_array));
 #ifdef _MSC_VER
     char *new_meta = _alloca(size);
@@ -175,7 +175,7 @@ INLINE static void *smalloc_array(s_smalloc_args *args) {
         });
 }
 
-MALLOC_API
+CSPTR_MALLOC_API
 void *smalloc(s_smalloc_args *args) {
     return (args->nmemb == 0 ? smalloc_impl : smalloc_array)(args);
 }

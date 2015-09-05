@@ -27,10 +27,6 @@
 
 # include "smalloc.h"
 
-# define INLINE CSPTR_INLINE
-# define PURE CSPTR_PURE
-# define MALLOC_API CSPTR_MALLOC_API
-
 typedef struct {
     enum pointer_kind kind;
     f_destructor dtor;
@@ -48,11 +44,11 @@ typedef struct {
     size_t ref_count;
 } s_meta_shared;
 
-INLINE size_t align(size_t s) {
+CSPTR_INLINE size_t align(size_t s) {
     return (s + (sizeof (char *) - 1)) & ~(sizeof (char *) - 1);
 }
 
-PURE INLINE s_meta *get_meta(void *ptr) {
+CSPTR_PURE CSPTR_INLINE s_meta *get_meta(void *ptr) {
     size_t *size = (size_t *) ptr - 1;
     return (s_meta *) ((char *) size - *size);
 }

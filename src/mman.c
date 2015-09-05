@@ -40,7 +40,7 @@ s_allocator smalloc_allocator = {malloc, free};
 #endif
 
 #ifndef _MSC_VER
-static CSPTR_INLINE size_t atomic_add(size_t *count, const size_t limit, const size_t val) {
+static CSPTR_INLINE size_t atomic_add(volatile size_t *count, const size_t limit, const size_t val) {
     size_t old_count, new_count;
     do {
       old_count = *count;
@@ -52,7 +52,7 @@ static CSPTR_INLINE size_t atomic_add(size_t *count, const size_t limit, const s
 }
 #endif
 
-static CSPTR_INLINE size_t atomic_increment(size_t *count) {
+static CSPTR_INLINE size_t atomic_increment(volatile size_t *count) {
 #ifdef _MSC_VER
     return InterlockedIncrement64(count);
 #else
@@ -60,7 +60,7 @@ static CSPTR_INLINE size_t atomic_increment(size_t *count) {
 #endif
 }
 
-static CSPTR_INLINE size_t atomic_decrement(size_t *count) {
+static CSPTR_INLINE size_t atomic_decrement(volatile size_t *count) {
 #ifdef _MSC_VER
     return InterlockedDecrement64(count);
 #else
@@ -106,7 +106,7 @@ CSPTR_INLINE static void dealloc_entry(s_meta *meta, void *ptr) {
         if (meta->kind & ARRAY) {
             s_meta_array *arr_meta = (void *) (meta + 1);
             for (size_t i = 0; i < arr_meta->nmemb; ++i)
-                meta->dtor(ptr + arr_meta->size * i, user_meta);
+                meta->dtor((char *) ptr + arr_meta->size * i, user_meta);
         } else
             meta->dtor(ptr, user_meta);
     }

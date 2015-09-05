@@ -41,7 +41,7 @@ typedef struct {
 #ifndef NDEBUG
     void *ptr;
 #endif /* !NDEBUG */
-    size_t ref_count;
+    volatile size_t ref_count;
 } s_meta_shared;
 
 CSPTR_INLINE size_t align(size_t s) {

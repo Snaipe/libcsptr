@@ -28,7 +28,7 @@
 #  define CSPTR_INLINE      __attribute__ ((always_inline)) inline
 #  define CSPTR_MALLOC_API  __attribute__ ((malloc))
 #  define CSPTR_PURE        __attribute__ ((pure))
-# elif defined(_MSVC_VER)
+# elif defined(_MSC_VER)
 #  define CSPTR_INLINE      __forceinline
 #  define CSPTR_MALLOC_API
 #  define CSPTR_PURE

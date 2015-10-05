@@ -61,6 +61,7 @@ set(INTERFACE_FILES
   include/csptr/smalloc.h
   include/csptr/array.h
   include/csptr/smart_ptr.h
+  include/csptr/common.h
 )
 
 set(MAN_FILES doc/csptr.3)

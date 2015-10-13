@@ -33,9 +33,9 @@ To compile the library, GCC 4.6+ is needed.
 #### Installation
 
 1. Clone this repository
-2. run `mkdir build && cd $_ && cmake -DCMAKE_INSTALL_PREFIX=$HOME .. && make && make install`
-   from the project root for a local install, or run
-   `mkdir build && cd $_ && cmake -DCMAKE_INSTALL_PREFIX=$HOME .. && make && sudo make install` for a global install.
+2. run `mkdir build && cd $_ && cmake -DCMAKE_INSTALL_PREFIX=$HOME .. && make && make install`  
+   from the project root for a local install, or run  
+   `mkdir build && cd $_ && cmake -DCMAKE_INSTALL_PREFIX=/usr .. && make && sudo make install` for a global install.
 
 ## Examples
 

@@ -30,10 +30,10 @@ endif()
 
 # Find dependencies
 
-option(TESTS "Turn on tests" ON)
+option(LIBCSPTR_TESTS "Turn on tests" ON)
 
 find_package(Check)
-if (CHECK_FOUND AND TESTS AND NOT LIBCSPTR_DISABLE_TESTS)
+if (CHECK_FOUND AND LIBCSPTR_TESTS AND NOT LIBCSPTR_DISABLE_TESTS)
   add_subdirectory(check)
 endif()
 

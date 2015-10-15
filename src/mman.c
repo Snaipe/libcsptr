@@ -85,7 +85,7 @@ CSPTR_INLINE void *get_smart_ptr_meta(void *ptr) {
 void *sref(void *ptr) {
     s_meta *meta = get_meta(ptr);
     assert(meta->ptr == ptr);
-    assert(meta->kind == SHARED);
+    assert(meta->kind & SHARED);
     atomic_increment(&((s_meta_shared *) meta)->ref_count);
     return ptr;
 }
@@ -187,7 +187,7 @@ void sfree(void *ptr) {
     s_meta *meta = get_meta(ptr);
     assert(meta->ptr == ptr);
 
-    if (meta->kind == SHARED && atomic_decrement(&((s_meta_shared *) meta)->ref_count))
+    if (meta->kind & SHARED && atomic_decrement(&((s_meta_shared *) meta)->ref_count))
         return;
 
     dealloc_entry(meta, ptr);

@@ -90,6 +90,35 @@ void *sref(void *ptr) {
     return ptr;
 }
 
+void *smove_size(void *ptr, size_t size) {
+    s_meta *meta = get_meta(ptr);
+    assert(meta->kind & UNIQUE);
+
+    s_smalloc_args args;
+
+    size_t *metasize = (size_t *) ptr - 1;
+    if (meta->kind & ARRAY) {
+        s_meta_array *arr_meta = get_smart_ptr_meta(ptr);
+        args = (s_smalloc_args) {
+            .size = arr_meta->size * arr_meta->nmemb,
+            .kind = SHARED | ARRAY;
+            .dtor = meta->dtor,
+            .meta = { arr_meta, *metasize },
+        };
+    } else {
+        args = (s_smalloc_args) {
+            .size = size,
+            .kind = SHARED;
+            .dtor = meta->dtor,
+            .meta = { arr_meta, *metasize },
+        };
+    }
+
+    void *newptr = smalloc(&args);
+    memcpy(newptr, ptr, size);
+    return newptr;
+}
+
 CSPTR_MALLOC_API
 CSPTR_INLINE static void *alloc_entry(size_t head, size_t size, size_t metasize) {
     const size_t totalsize = head + size + metasize + sizeof (size_t);

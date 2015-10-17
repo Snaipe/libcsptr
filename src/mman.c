@@ -101,16 +101,17 @@ void *smove_size(void *ptr, size_t size) {
         s_meta_array *arr_meta = get_smart_ptr_meta(ptr);
         args = (s_smalloc_args) {
             .size = arr_meta->size * arr_meta->nmemb,
-            .kind = SHARED | ARRAY;
+            .kind = SHARED | ARRAY,
             .dtor = meta->dtor,
             .meta = { arr_meta, *metasize },
         };
     } else {
+        void *user_meta = get_smart_ptr_meta(ptr);
         args = (s_smalloc_args) {
             .size = size,
-            .kind = SHARED;
+            .kind = SHARED,
             .dtor = meta->dtor,
-            .meta = { arr_meta, *metasize },
+            .meta = { user_meta, *metasize },
         };
     }
 

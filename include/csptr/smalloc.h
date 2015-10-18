@@ -72,8 +72,12 @@ CSPTR_PURE void *get_smart_ptr_meta(void *ptr);
 void *sref(void *ptr);
 CSPTR_MALLOC_API void *smalloc(s_smalloc_args *args);
 void sfree(void *ptr);
+void *smove_size(void *ptr, size_t size);
 
 #  define smalloc(...) \
     smalloc(&(s_smalloc_args) { CSPTR_SENTINEL __VA_ARGS__ })
+
+#  define smove(Ptr) \
+    smove_size((Ptr), sizeof (*(Ptr)))
 
 #endif /* !CSPTR_SMALLOC_H_ */

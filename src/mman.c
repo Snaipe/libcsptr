@@ -101,7 +101,7 @@ void *smove_size(void *ptr, size_t size) {
         s_meta_array *arr_meta = get_smart_ptr_meta(ptr);
         args = (s_smalloc_args) {
             .size = arr_meta->size * arr_meta->nmemb,
-            .kind = SHARED | ARRAY,
+            .kind = (enum pointer_kind) (SHARED | ARRAY),
             .dtor = meta->dtor,
             .meta = { arr_meta, *metasize },
         };
@@ -199,7 +199,7 @@ CSPTR_INLINE static void *smalloc_array(s_smalloc_args *args) {
     memcpy(arr_meta + 1, args->meta.data, args->meta.size);
     return smalloc_impl(&(s_smalloc_args) {
             .size = args->nmemb * args->size,
-            .kind = args->kind | ARRAY,
+            .kind = (enum pointer_kind) (args->kind | ARRAY),
             .dtor = args->dtor,
             .meta = { &new_meta, size },
         });

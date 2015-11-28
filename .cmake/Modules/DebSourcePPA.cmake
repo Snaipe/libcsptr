@@ -233,7 +233,7 @@ foreach(RELEASE ${CPACK_DEBIAN_DISTRIBUTION_RELEASES})
     endif( CPACK_COMPONENT_${UPPER_COMPONENT}_SUGGESTS_${DISTRIBUTION_NAME_UPPER}_${RELEASE_UPPER} )
 
     file(APPEND ${DEBIAN_CONTROL} "\n"
-      "Package: ${COMPONENT}\n"
+      "Package: ${CPACK_DEBIAN_PACKAGE_NAME}-${COMPONENT}\n"
       "Architecture: any\n"
       "Depends: ${DEPENDS}\n"
       "Recommends: ${RECOMMENDS}\n"

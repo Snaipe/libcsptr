@@ -1,0 +1,2 @@
+Libcsptr (for "lib-c-smart-pointers") is a library providing
+smart pointers for the (GNU) C programming language.

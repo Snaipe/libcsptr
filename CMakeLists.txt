@@ -6,7 +6,7 @@ project(csptr C)
 
 enable_testing()
 
-set(PROJECT_VERSION "2.0.5-4")
+set(PROJECT_VERSION "2.0.5-5")
 set(MODULE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/.cmake/Modules")
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${MODULE_DIR})
 

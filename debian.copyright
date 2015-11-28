@@ -1,7 +1,7 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: libcsptr
 Upstream-Contact: Franklin "Snaipe" Mathieu <franklinmathieu@gmail.com>
-Source: http://www.example.com/code/venus
+Source: http://github.com/Snaipe/libcsptr
 
 Files: *
 Copyright: 2015, Franklin "Snaipe" Mathieu <franklinmathieu@gmail.com>

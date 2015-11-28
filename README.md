@@ -24,6 +24,12 @@ to the (GNU) C programming language.
 
 * Mac OS X: `brew install snaipe/soft/libcsptr`
 * [AUR](https://aur.archlinux.org/packages/libcsptr-git/): `yaourt -S libcsptr`
+* Ubuntu:
+    ``` bash
+    $ sudo add-apt-repository ppa:snaipewastaken/ppa
+    $ sudo apt-get update
+    $ sudo apt-get install libcsptr-dev
+    ```
 
 ### Building from source
 #### Prerequisites

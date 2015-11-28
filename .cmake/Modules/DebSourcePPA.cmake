@@ -281,7 +281,7 @@ foreach(RELEASE ${CPACK_DEBIAN_DISTRIBUTION_RELEASES})
     file(APPEND ${DEBIAN_RULES}
       "	cd $(BUILDDIR); cmake -DCOMPONENT=${COMPONENT} -DCMAKE_INSTALL_PREFIX=../${PATH}/usr -P cmake_install.cmake\n"
       "	mkdir -p ${PATH}/DEBIAN\n"
-      "	dpkg-gensymbols -p${COMPONENT} -P${PATH}\n"
+      "	dpkg-gensymbols -p${CPACK_DEBIAN_PACKAGE_NAME}-${COMPONENT} -P${PATH}\n"
       )
   endforeach(COMPONENT ${CPACK_COMPONENTS_ALL})
 
@@ -295,7 +295,7 @@ foreach(RELEASE ${CPACK_DEBIAN_DISTRIBUTION_RELEASES})
   foreach(COMPONENT ${CPACK_COMPONENTS_ALL})
     set(PATH debian/${COMPONENT})
     file(APPEND ${DEBIAN_RULES}
-      "	dpkg-gencontrol -p${COMPONENT} -P${PATH} -Tdebian/${COMPONENT}.substvars\n"
+      "	dpkg-gencontrol -p${CPACK_DEBIAN_PACKAGE_NAME}-${COMPONENT} -P${PATH} -Tdebian/${COMPONENT}.substvars\n"
       "	dpkg --build ${PATH} ..\n"
       )
   endforeach(COMPONENT ${CPACK_COMPONENTS_ALL})

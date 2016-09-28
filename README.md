@@ -8,7 +8,7 @@ C Smart Pointers
 
 ## What this is
 
-This project is a tentative attempt to bring smart pointer constructs
+This project is an attempt to bring smart pointer constructs
 to the (GNU) C programming language.
 
 ### Features

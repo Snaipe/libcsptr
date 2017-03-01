@@ -1,5 +1,9 @@
 include_directories(../include)
 
+if (NOT MSVC AND "${CMAKE_C_COMPILER_ID}" STREQUAL "GNU")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-trampolines")
+endif ()
+
 set(TEST_SOURCES
   test/test.c
   test/test.h

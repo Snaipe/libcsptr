@@ -30,9 +30,13 @@
 # include "smalloc.h"
 
 CSPTR_INLINE void sfree_stack(void *ptr) {
-    void **real_ptr = ptr;
-    sfree(*real_ptr);
-    *real_ptr = NULL;
+    union {
+        void **real_ptr;
+        void *ptr;
+    } conv;
+    conv.ptr = ptr;
+    sfree(*conv.real_ptr);
+    *conv.real_ptr = NULL;
 }
 
 # define ARGS_ args.dtor, { args.meta.ptr, args.meta.size }

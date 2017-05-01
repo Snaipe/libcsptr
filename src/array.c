@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright © 2015-2016 Franklin "Snaipe" Mathieu <http://snai.pe/>
+ * Copyright © 2015-2017 Franklin "Snaipe" Mathieu <http://snai.pe/>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,23 +21,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+#include "array.h"
 
-#ifndef CSPTR_ARRAY_H_
-# define CSPTR_ARRAY_H_
+CSPTR_PURE size_t array_length(void *ptr) {
+    s_meta_array *meta = get_smart_ptr_meta(ptr);
+    return meta ? meta->nmemb : 0;
+}
 
-# include "common.h"
-# include "smart_ptr.h"
+CSPTR_PURE size_t array_type_size(void *ptr) {
+    s_meta_array *meta = get_smart_ptr_meta(ptr);
+    return meta ? meta->size : 0;
+}
 
-typedef struct {
-    size_t nmemb;
-    size_t size;
-} s_meta_array;
-
-CSPTR_PURE size_t array_length(void *ptr);
-
-CSPTR_PURE size_t array_type_size(void *ptr);
-
-CSPTR_PURE void *array_user_meta(void *ptr);
-
-
-#endif /* !CSPTR_ARRAY_H_ */
+CSPTR_PURE CSPTR_INLINE void *array_user_meta(void *ptr) {
+    s_meta_array *meta = get_smart_ptr_meta(ptr);
+    return meta ? meta + 1 : NULL;
+}

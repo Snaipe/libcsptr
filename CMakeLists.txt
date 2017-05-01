@@ -52,6 +52,7 @@ configure_file(
 # List sources and headers
 
 set(SOURCE_FILES
+    src/array.c
     src/mman.c
     src/mman.h
 )

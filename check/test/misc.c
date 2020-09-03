@@ -20,10 +20,11 @@ START_TEST (test_alloc_failure) {
 } END_TEST
 #endif
 
-TFun misc_tests[] = {
+TCase *make_misc_tests(void) {
+    TCase *tc = tcase_create("misc");
 #ifndef SMALLOC_FIXED_ALLOCATOR
-    test_alloc_failure,
+    tcase_add_test(tc, test_alloc_failure);
 #endif
-    test_zero_size,
-    NULL
-};
+    tcase_add_test(tc, test_zero_size);
+    return tc;
+}

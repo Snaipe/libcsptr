@@ -5,9 +5,9 @@
 
 Suite *unique_ptr_suite(void);
 
-extern TFun scalar_tests[];
-extern TFun array_tests[];
-extern TFun misc_tests[];
-extern TFun shared_tests[];
+TCase *make_scalar_tests(void);
+TCase *make_array_tests(void);
+TCase *make_misc_tests(void);
+TCase *make_shared_tests(void);
 
 #endif /* !TEST_H_ */

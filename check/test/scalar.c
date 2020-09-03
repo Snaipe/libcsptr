@@ -36,11 +36,11 @@ START_TEST (test_dtor_run_with_meta) {
     ck_assert_msg(dtor_run, "Expected destructor to run");
 } END_TEST
 
-TFun scalar_tests[] = {
-    test_pointer_valid,
-    test_meta,
-    test_dtor_run,
-    test_dtor_run_with_meta,
-    NULL
-};
-
+TCase *make_scalar_tests(void) {
+    TCase *tc = tcase_create("scalar");
+    tcase_add_test(tc, test_pointer_valid);
+    tcase_add_test(tc, test_meta);
+    tcase_add_test(tc, test_dtor_run);
+    tcase_add_test(tc, test_dtor_run_with_meta);
+    return tc;
+}

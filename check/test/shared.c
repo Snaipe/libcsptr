@@ -21,8 +21,9 @@ START_TEST (test_shared_sref) {
     ck_assert_msg(dtor_run == 0, "Expected destructor NOT to have run.");
 } END_TEST
 
-TFun shared_tests[] = {
-    test_shared_init,
-    test_shared_sref,
-    NULL
-};
+TCase *make_shared_tests(void) {
+    TCase *tc = tcase_create("shared");
+    tcase_add_test(tc, test_shared_init);
+    tcase_add_test(tc, test_shared_sref);
+    return tc;
+}

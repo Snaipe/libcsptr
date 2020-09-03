@@ -9,10 +9,10 @@ const struct meta m = {1, 2, 3};
 
 Suite *master_suite(void) {
     Suite *s = suite_create("master");
-    suite_add_tcase(s, make_test_case("misc", misc_tests));
-    suite_add_tcase(s, make_test_case("scalar", scalar_tests));
-    suite_add_tcase(s, make_test_case("array", array_tests));
-    suite_add_tcase(s, make_test_case("shared", shared_tests));
+    suite_add_tcase(s, make_misc_tests());
+    suite_add_tcase(s, make_scalar_tests());
+    suite_add_tcase(s, make_array_tests());
+    suite_add_tcase(s, make_shared_tests());
     return s;
 }
 

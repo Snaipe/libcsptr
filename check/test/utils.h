@@ -19,14 +19,6 @@ inline void assert_valid_ptr(void *ptr) {
             "Expected unique_ptr to return an aligned pointer.");
 }
 
-__attribute__((always_inline))
-inline TCase *make_test_case(const char *name, TFun func[]) {
-    TCase *tc = tcase_create(name);
-    for (TFun *f = func; *f != NULL; ++f)
-        tcase_add_test(tc, *f);
-    return tc;
-}
-
 struct meta {
     int i;
     long l;

@@ -51,10 +51,11 @@ START_TEST (test_array_dtor_run_with_meta) {
     ck_assert_msg(dtor_run, "Expected destructor to run");
 } END_TEST
 
-TFun array_tests[] = {
-    test_array,
-    test_array_meta,
-    test_array_dtor_run,
-    test_array_dtor_run_with_meta,
-    NULL
-};
+TCase *make_array_tests(void) {
+    TCase *tc = tcase_create("array");
+    tcase_add_test(tc, test_array);
+    tcase_add_test(tc, test_array_meta);
+    tcase_add_test(tc, test_array_dtor_run);
+    tcase_add_test(tc, test_array_dtor_run_with_meta);
+    return tc;
+}

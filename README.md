@@ -221,4 +221,4 @@ A. Yes, but as this project has not been widely used, there might be
    some bugs. Beware!
 
 **Q. How did you make this ?**  
-A. Here's a [link to my blog post](http://snaipe.me/c/c-smart-pointers/) on the matter.
+A. Here's a [link to my blog post](http://snaipe.me/c/c-smart-pointers/) on the matter. In short words, with `__attribute__ ((cleanup(func_to_free_stack)))`.

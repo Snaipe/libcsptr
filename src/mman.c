@@ -136,7 +136,7 @@ CSPTR_INLINE static void dealloc_entry(s_meta *meta, void *ptr) {
         if (meta->kind & ARRAY) {
             s_meta_array *arr_meta = (void *) (meta + 1);
             for (size_t i = 0; i < arr_meta->nmemb; ++i)
-                meta->dtor((char *) ptr + arr_meta->size * i, user_meta);
+                meta->dtor((char *) ptr + arr_meta->size * i, arr_meta + 1);
         } else
             meta->dtor(ptr, user_meta);
     }

@@ -70,7 +70,7 @@ CSPTR_INLINE void sfree_stack(void *ptr) {
     ({                                                                      \
         struct s_tmp {                                                      \
             CSPTR_SENTINEL_DEC                                              \
-            __typeof__(Type) *value;                     \
+            __typeof__(Type) *value;                                        \
             f_destructor dtor;                                              \
             struct {                                                        \
                 const void *ptr;                                            \
@@ -81,8 +81,12 @@ CSPTR_INLINE void sfree_stack(void *ptr) {
             __VA_ARGS__                                                     \
         };                                                                  \
         void *var = smalloc(sizeof (Type), Length, Kind, ARGS_);            \
-        if (var != NULL)                                                    \
-            memcpy(var, args.value, sizeof (Type) * Length);                \
+        if (var != NULL) {                                                  \
+            if (args.value != NULL)                                         \
+                memcpy(var, args.value, sizeof (Type) * Length);            \
+            else                                                            \
+                memset(var, 0, sizeof(Type) * Length);                      \
+        }                                                                   \
         var;                                                                \
     })
 
